@@ -4,8 +4,11 @@ php-cs-fix:
 
 .PHONY: psalm
 psalm:
-	vendor/bin/psalm --no-cache
+	vendor/bin/psalm --no-cache --show-info=true
 
 .PHONY: psalm-update-baseline
 psalm-update-baseline:
 	vendor/bin/psalm --no-cache --set-baseline=psalm-baseline.xml
+
+.PHONY: dev
+dev: psalm php-cs-fix

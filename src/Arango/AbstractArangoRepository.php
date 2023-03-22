@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Arango;
 
+use App\InputHelper;
+use ArangoDBClient\ClientException;
 use ArangoDBClient\Collection;
 use ArangoDBClient\CollectionHandler;
 use ArangoDBClient\Document;
+use ArangoDBClient\Exception;
 
 /**
  * @template T
@@ -29,8 +32,11 @@ abstract class AbstractArangoRepository
     public function findAll(): array
     {
         $ret = [];
-        foreach ($this->collectionHandler->all($this->collectionId) as $document) {
-            $ret[] = $this->constructEntity($document);
+        try {
+            foreach ($this->collectionHandler->all($this->collectionId) as $document) {
+                $ret[] = $this->constructEntity(InputHelper::type($document, Document::class));
+            }
+        } catch (ClientException|Exception $e) {
         }
 
         return $ret;

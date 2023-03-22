@@ -20,7 +20,6 @@ class ArangoDatabase
             ConnectionOptions::OPTION_AUTH_USER => $username,
             ConnectionOptions::OPTION_AUTH_PASSWD => $password,
             ConnectionOptions::OPTION_CONNECTION => 'Close',
-            ConnectionOptions::OPTION_TIMEOUT => 3,
             ConnectionOptions::OPTION_RECONNECT => true,
         ];
         $this->connection = new Connection($connectionOptions);
