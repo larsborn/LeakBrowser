@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <ul>
+        {% for source in sources %}
+            <li>{{ source.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
