@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Arango;
 
@@ -11,7 +13,7 @@ class ArangoDatabase
 
     public function __construct(string $hostname, int $port, string $databaseName, string $username, string $password)
     {
-        $connectionOptions = array(
+        $connectionOptions = [
             ConnectionOptions::OPTION_DATABASE => $databaseName,
             ConnectionOptions::OPTION_ENDPOINT => sprintf('tcp://%s:%s', $hostname, $port),
             ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
@@ -20,7 +22,7 @@ class ArangoDatabase
             ConnectionOptions::OPTION_CONNECTION => 'Close',
             ConnectionOptions::OPTION_TIMEOUT => 3,
             ConnectionOptions::OPTION_RECONNECT => true,
-        );
+        ];
         $this->connection = new Connection($connectionOptions);
     }
 

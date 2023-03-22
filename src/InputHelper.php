@@ -85,7 +85,7 @@ final class InputHelper
             throw new InvalidArgumentException($value, 'float');
         }
 
-        return (float)$value;
+        return (float) $value;
     }
 
     /**
@@ -99,7 +99,7 @@ final class InputHelper
             throw new InvalidArgumentException($value, 'numeric-string');
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -178,8 +178,10 @@ final class InputHelper
 
     /**
      * @template T
-     * @param mixed $value
+     *
+     * @param mixed           $value
      * @param class-string<T> $type
+     *
      * @return T
      */
     public static function type($value, string $type)
@@ -193,8 +195,10 @@ final class InputHelper
 
     /**
      * @template T
-     * @param mixed $value
+     *
+     * @param mixed           $value
      * @param class-string<T> $type
+     *
      * @return T|null
      */
     public static function nullableType($value, string $type)
