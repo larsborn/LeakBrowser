@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\DTO\SourceWithCount;
+use App\Repository\SampleRepository;
 use App\Repository\SourceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,9 +13,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/')]
-    public function home(SourceRepository $sourceRepository): Response
+    private SourceRepository $sourceRepository;
+    private SampleRepository $sampleRepository;
+
+    public function __construct(SourceRepository $sourceRepository, SampleRepository $sampleRepository)
     {
-        return $this->render('home.html.twig', ['sources' => $sourceRepository->findAll()]);
+        $this->sourceRepository = $sourceRepository;
+        $this->sampleRepository = $sampleRepository;
+    }
+
+    #[Route('/')]
+    public function home(): Response
+    {
+        $sources = [];
+        foreach ($this->sourceRepository->findAll() as $source) {
+            $sources[] = new SourceWithCount(
+                $source,
+                $this->sampleRepository->countBySource($source),
+            );
+        }
+
+        return $this->render('home.html.twig', ['sources' => $sources]);
     }
 }

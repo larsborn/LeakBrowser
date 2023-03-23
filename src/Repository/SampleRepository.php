@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Arango\AbstractArangoRepository;
 use App\Entity\Sample;
+use App\Entity\Source;
 use App\InputHelper;
 use ArangoDBClient\Document;
 
@@ -29,5 +30,20 @@ class SampleRepository extends AbstractArangoRepository
             InputHelper::string($document->get('sha256')),
             InputHelper::int($document->get('size')),
         );
+    }
+
+    public function countBySource(Source $source): int
+    {
+        $ret = $this->aql(
+            <<<AQL
+FOR edge in sample_from_source
+    FILTER edge._to == @source
+    COLLECT WITH COUNT INTO cnt
+    RETURN cnt
+AQL,
+            ['source' => $source->getId()]
+        );
+
+        return $ret[0];
     }
 }
