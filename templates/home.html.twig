@@ -2,7 +2,10 @@
 {% block body %}
     <ul>
         {% for aggregate in sources %}
-            <li>{{ aggregate.source.name }} ({{ aggregate.count }})</li>
+            <li>
+                <a href="{{ path('app_home_bysource', {'sourceId': aggregate.source.idSuffix}) }}">{{ aggregate.source.name }}</a>
+                ({{ aggregate.count }})
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

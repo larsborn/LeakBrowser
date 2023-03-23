@@ -30,6 +30,20 @@ abstract class AbstractArangoRepository
     }
 
     /**
+     * @return ?T
+     * @throws Exception
+     */
+    public function get(string $id): ?object
+    {
+        $rows = $this->aql(
+            sprintf('FOR row in %s FILTER row._id == @id RETURN row', $this->getCollectionName()),
+            ['id' => $id]
+        );
+
+        return count($rows) === 1 ? $this->constructEntity($rows[0]) : null;
+    }
+
+    /**
      * @return list<T>
      */
     public function findAll(): array

@@ -46,4 +46,20 @@ AQL,
 
         return $ret[0];
     }
+
+    public function findBySource(Source $source): array
+    {
+        foreach ($this->aql(
+            <<<AQL
+FOR edge in sample_from_source
+    FILTER edge._to == @source
+    RETURN edge._from
+AQL,
+            ['source' => $source->getId()]
+        ) as $row) {
+            dump($row);
+        }
+
+        return [];
+    }
 }

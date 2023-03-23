@@ -24,4 +24,9 @@ class Source
     {
         return $this->name;
     }
+
+    public function getIdSuffix(): string
+    {
+        return explode('/', $this->id)[1];
+    }
 }
