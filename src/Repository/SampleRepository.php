@@ -29,6 +29,8 @@ class SampleRepository extends AbstractArangoRepository
             InputHelper::string($document->get('sha1')),
             InputHelper::string($document->get('sha256')),
             InputHelper::int($document->get('size')),
+            InputHelper::string($document->get('file_magic')),
+            InputHelper::array($document->get('file_names'))
         );
     }
 
@@ -58,7 +60,7 @@ FOR edge in sample_from_source
 AQL,
             ['source' => $source->getId()]
         ) as $id) {
-            $ret[] = $this->getDocumentHandler()->get($this->getCollectionName(), $id);
+            $ret[] = $this->constructEntity($this->getDocumentHandler()->get($this->getCollectionName(), $id));
         }
 
         return $ret;

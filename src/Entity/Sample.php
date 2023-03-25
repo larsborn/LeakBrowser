@@ -12,15 +12,31 @@ class Sample
     private string $sha1;
     private string $sha256;
     private int $size;
+    private string $fileMagic;
 
-    public function __construct(string $id, int $crc32, string $md5, string $sha1, string $sha256, int $size)
-    {
+    /**
+     * @var string[]
+     */
+    private array $fileNames;
+
+    public function __construct(
+        string $id,
+        int $crc32,
+        string $md5,
+        string $sha1,
+        string $sha256,
+        int $size,
+        string $fileMagic,
+        array $fileNames,
+    ) {
         $this->id = $id;
         $this->crc32 = $crc32;
         $this->md5 = $md5;
         $this->sha1 = $sha1;
         $this->sha256 = $sha256;
         $this->size = $size;
+        $this->fileMagic = $fileMagic;
+        $this->fileNames = $fileNames;
     }
 
     public function getId(): string
@@ -51,5 +67,18 @@ class Sample
     public function getSize(): int
     {
         return $this->size;
+    }
+
+    public function getFileMagic(): string
+    {
+        return $this->fileMagic;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFileNames(): array
+    {
+        return $this->fileNames;
     }
 }
