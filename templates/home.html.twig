@@ -3,7 +3,7 @@
     <ul>
         {% for aggregate in sources %}
             <li>
-                <a href="{{ path('app_home_bysource', {'sourceId': aggregate.source.idSuffix}) }}">{{ aggregate.source.name }}</a>
+                <a href="{{ path('app_leak_bysource', {'sourceId': aggregate.source.idSuffix}) }}">{{ aggregate.source.name }}</a>
                 ({{ aggregate.count }})
             </li>
         {% endfor %}

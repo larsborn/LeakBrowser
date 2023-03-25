@@ -1,4 +1,9 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <h1>{{ source.name }}</h1>
+    <ul>
+    {% for sample in samples %}
+        <li><a href="#">{{ sample.sha256 }}</a></li>
+    {% endfor %}
+    </ul>
 {% endblock %}

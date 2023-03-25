@@ -49,6 +49,7 @@ AQL,
 
     public function findBySource(Source $source): array
     {
+        $ret = [];
         foreach ($this->aql(
             <<<AQL
 FOR edge in sample_from_source
@@ -56,10 +57,10 @@ FOR edge in sample_from_source
     RETURN edge._from
 AQL,
             ['source' => $source->getId()]
-        ) as $row) {
-            dump($row);
+        ) as $id) {
+            $ret[] = $this->getDocumentHandler()->get($this->getCollectionName(), $id);
         }
 
-        return [];
+        return $ret;
     }
 }

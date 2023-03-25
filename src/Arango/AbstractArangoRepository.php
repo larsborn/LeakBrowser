@@ -9,6 +9,7 @@ use ArangoDBClient\ClientException;
 use ArangoDBClient\Collection;
 use ArangoDBClient\CollectionHandler;
 use ArangoDBClient\Document;
+use ArangoDBClient\DocumentHandler;
 use ArangoDBClient\Exception;
 use ArangoDBClient\Statement;
 
@@ -20,6 +21,7 @@ abstract class AbstractArangoRepository
     private ArangoDatabase $arangoDatabase;
     private Collection $collectionId;
     private CollectionHandler $collectionHandler;
+    private DocumentHandler $documentHandler;
 
     public function __construct(ArangoDatabase $arangoDatabase)
     {
@@ -27,6 +29,7 @@ abstract class AbstractArangoRepository
         $collection = new Collection($this->getCollectionName());
         $this->collectionHandler = new CollectionHandler($arangoDatabase->getConnection());
         $this->collectionId = $this->collectionHandler->get($collection);
+        $this->documentHandler = new DocumentHandler($arangoDatabase->getConnection());
     }
 
     /**
@@ -88,5 +91,10 @@ abstract class AbstractArangoRepository
         }
 
         return $ret;
+    }
+
+    protected function getDocumentHandler(): DocumentHandler
+    {
+        return $this->documentHandler;
     }
 }
