@@ -22,7 +22,7 @@ class LeakController extends AbstractController
     }
 
     #[Route('/{sourceId}')]
-    public function bySource($sourceId): Response
+    public function bySource(string $sourceId): Response
     {
         $source = $this->sourceRepository->get(sprintf('sources/%s', $sourceId));
         if ($source === null) {
