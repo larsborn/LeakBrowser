@@ -1,0 +1,33 @@
+{
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.3.0",
+    "@symfony/webpack-encore": "^4.2.0",
+    "bootstrap": "^5.2.3",
+    "bootstrap-sass": "^3.4.3",
+    "core-js": "^3.29.1",
+    "prettier": "^2.8.7",
+    "regenerator-runtime": "^0.13.11",
+    "sass": "^1.60.0",
+    "sass-loader": "^13.2.1",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1",
+    "webpack-notifier": "^1.15.0"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress",
+    "check": "prettier --config ./prettierrc.json --check ./assets",
+    "format": "prettier --config ./prettierrc.json --write ./assets"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@popperjs/core": "^2.11.7"
+  }
+}

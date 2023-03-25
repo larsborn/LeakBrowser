@@ -10,5 +10,13 @@ psalm:
 psalm-update-baseline:
 	vendor/bin/psalm --no-cache --set-baseline=psalm-baseline.xml
 
+.PHONY: prettier
+prettier:
+	yarn run format
+
+.PHONY: watch
+watch:
+	yarn run watch
+
 .PHONY: dev
-dev: psalm php-cs-fix
+dev: psalm php-cs-fix prettier
