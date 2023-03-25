@@ -38,12 +38,23 @@ abstract class AbstractArangoRepository
      */
     public function get(string $id): ?object
     {
-        $rows = $this->aql(
-            sprintf('FOR row in %s FILTER row._id == @id RETURN row', $this->getCollectionName()),
-            ['id' => $id]
-        );
+        return $this->constructEntity($this->getDocumentHandler()->get($this->getCollectionName(), $id));
+    }
 
-        return count($rows) === 1 ? $this->constructEntity($rows[0]) : null;
+    /**
+     * @param string[] $ids
+     * @return T[]
+     * @throws Exception
+     */
+    public function getAll(array $ids): array
+    {
+        return array_map(
+            fn(Document $row) => $this->constructEntity($row),
+            $this->aql(
+                sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
+                ['ids' => $ids]
+            )
+        );
     }
 
     /**
