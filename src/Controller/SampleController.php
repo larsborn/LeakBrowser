@@ -6,6 +6,7 @@ use App\Repository\SampleRepository;
 use App\Repository\SubfileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/sample')]
@@ -24,6 +25,9 @@ class SampleController extends AbstractController
     public function sample(string $sha256): Response
     {
         $sample = $this->sampleRepository->get($sha256);
+        if ($sample === null) {
+            throw new NotFoundHttpException();
+        }
 
         return $this->render('Sample/show.html.twig', [
             'sample' => $sample,

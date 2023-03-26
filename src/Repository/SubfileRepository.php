@@ -12,6 +12,9 @@ use App\InputHelper;
 use ArangoDBClient\Document;
 use DateTimeImmutable;
 
+/**
+ * @template-extends AbstractArangoRepository<Subfile>
+ */
 class SubfileRepository extends AbstractArangoRepository
 {
     private SampleRepository $sampleRepository;
@@ -27,12 +30,18 @@ class SubfileRepository extends AbstractArangoRepository
         return 'subfile';
     }
 
-    protected function constructEntity(Document $document): object
+    protected function constructEntity(Document $document): Subfile
     {
         return new Subfile(
             $document->getId(),
-            $this->sampleRepository->get($document->get('_from')),
-            $this->sampleRepository->get($document->get('_to')),
+            InputHelper::type(
+                $this->sampleRepository->get(InputHelper::string($document->get('_from'))),
+                Sample::class
+            ),
+            InputHelper::type(
+                $this->sampleRepository->get(InputHelper::string($document->get('_to'))),
+                Sample::class
+            ),
             array_map(
                 fn(array $path) => $this->constructPath($path),
                 $document->get('paths')
