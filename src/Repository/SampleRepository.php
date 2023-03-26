@@ -24,11 +24,11 @@ class SampleRepository extends AbstractArangoRepository
     {
         return new Sample(
             $document->getId(),
-            InputHelper::int($document->get('crc32')),
-            InputHelper::string($document->get('md5')),
-            InputHelper::string($document->get('sha1')),
-            InputHelper::string($document->get('sha256')),
-            InputHelper::int($document->get('size')),
+            InputHelper::nullableInt($document->get('crc32')),
+            InputHelper::nullableString($document->get('md5')),
+            InputHelper::nullableString($document->get('sha1')),
+            InputHelper::nullableString($document->get('sha256')),
+            InputHelper::nullableInt($document->get('size')),
             InputHelper::nullableString($document->get('file_magic')),
             InputHelper::nullableArray($document->get('file_names'))
         );

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Arango;
 
 use App\InputHelper;
-use ArangoDBClient\ClientException;
 use ArangoDBClient\Collection;
 use ArangoDBClient\CollectionHandler;
 use ArangoDBClient\Document;
@@ -34,7 +33,6 @@ abstract class AbstractArangoRepository
 
     /**
      * @return ?T
-     * @throws Exception
      */
     public function get(string $id): ?object
     {
@@ -44,12 +42,11 @@ abstract class AbstractArangoRepository
     /**
      * @param string[] $ids
      * @return T[]
-     * @throws Exception
      */
     public function getAll(array $ids): array
     {
         return array_map(
-            fn (Document $row) => $this->constructEntity($row),
+            fn(Document $row) => $this->constructEntity($row),
             $this->aql(
                 sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
                 ['ids' => $ids]
@@ -63,11 +60,8 @@ abstract class AbstractArangoRepository
     public function findAll(): array
     {
         $ret = [];
-        try {
-            foreach ($this->collectionHandler->all($this->collectionId) as $document) {
-                $ret[] = $this->constructEntity(InputHelper::type($document, Document::class));
-            }
-        } catch (ClientException|Exception $e) {
+        foreach ($this->collectionHandler->all($this->collectionId) as $document) {
+            $ret[] = $this->constructEntity(InputHelper::type($document, Document::class));
         }
 
         return $ret;
