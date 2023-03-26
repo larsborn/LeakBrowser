@@ -13,6 +13,10 @@
                 <dd class="col-sm-9">{{ sample.sha1 }}</dd>
                 <dt class="col-sm-3">CRC32</dt>
                 <dd class="col-sm-9">{{ sample.crc32 }}</dd>
+                {% if sample.size %}
+                    <dt class="col-sm-3">Size</dt>
+                    <dd class="col-sm-9">{{ sample.size|fileSize }}</dd>
+                {% endif %}
                 {% if sample.fileMagic %}
                     <dt class="col-sm-3">Magic</dt>
                     <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
@@ -31,7 +35,9 @@
                 <ul>
                     {% for subfile in children %}
                         <li>
-                            <a href="{{ path('app_sample_sample', {sha256: subfile.child.sha256}) }}">{{ subfile.child.sha256 }}</a>
+                            <a href="{{ path('app_sample_sample', {sha256: subfile.child.sha256}) }}">
+                                {{ subfile.child.sha256 }}
+                            </a>{% if subfile.child.size %} ({{ subfile.child.size|fileSize }}){% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -45,7 +51,9 @@
                 <ul>
                     {% for subfile in parents %}
                         <li>
-                            <a href="{{ path('app_sample_sample', {sha256: subfile.parent.sha256}) }}">{{ subfile.parent.sha256 }}</a>
+                            <a href="{{ path('app_sample_sample', {sha256: subfile.parent.sha256}) }}">
+                                {{ subfile.parent.sha256 }}
+                            </a> ({{ subfile.parent.size|fileSize }})
                         </li>
                     {% endfor %}
                 </ul>

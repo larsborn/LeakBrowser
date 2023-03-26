@@ -24,7 +24,7 @@ class SampleController extends AbstractController
     public function sample(string $sha256): Response
     {
         $sample = $this->sampleRepository->get($sha256);
-        
+
         return $this->render('Sample/show.html.twig', [
             'sample' => $sample,
             'children' => $this->subfileRepository->findChildren($sample),

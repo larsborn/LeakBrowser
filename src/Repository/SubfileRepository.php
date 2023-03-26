@@ -4,9 +4,13 @@ namespace App\Repository;
 
 use App\Arango\AbstractArangoRepository;
 use App\Arango\ArangoDatabase;
+use App\DTO\Path;
+use App\DTO\Timestamp;
 use App\Entity\Sample;
 use App\Entity\Subfile;
+use App\InputHelper;
 use ArangoDBClient\Document;
+use DateTimeImmutable;
 
 class SubfileRepository extends AbstractArangoRepository
 {
@@ -29,7 +33,29 @@ class SubfileRepository extends AbstractArangoRepository
             $document->getId(),
             $this->sampleRepository->get($document->get('_from')),
             $this->sampleRepository->get($document->get('_to')),
-            $document->get('paths'),
+            array_map(
+                fn(array $path) => $this->constructPath($path),
+                $document->get('paths')
+            ),
+        );
+    }
+
+    private function constructPath(array $path): Path
+    {
+        $timestamps = isset($path['timestamps']) ? InputHelper::array($path['timestamps']) : null;
+
+        return new Path(
+            isset($path['processor_name']) ? InputHelper::string($path['processor_name']) : null,
+            isset($path['file_name']) ? InputHelper::string($path['file_name']) : null,
+            isset($path['email_subject']) ? InputHelper::string($path['email_subject']) : null,
+            isset($path['email_sender_name']) ? InputHelper::string($path['email_sender_name']) : null,
+            $timestamps === null ? [] : array_map(
+                fn(array $row) => new Timestamp(
+                    new DateTimeImmutable($row['value']),
+                    isset($row['description']) ? InputHelper::string($row['description']) : null,
+                ),
+                $timestamps
+            ),
         );
     }
 

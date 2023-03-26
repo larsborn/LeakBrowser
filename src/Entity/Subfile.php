@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\DTO\Path;
+
 class Subfile
 {
     private string $id;
@@ -9,10 +11,13 @@ class Subfile
     private Sample $child;
 
     /**
-     * @var string[]
+     * @var Path[]
      */
     private array $paths;
 
+    /**
+     * @param Path[]|null $paths
+     */
     public function __construct(string $id, Sample $parent, Sample $child, ?array $paths)
     {
         $this->id = $id;
@@ -37,7 +42,7 @@ class Subfile
     }
 
     /**
-     * @return string[]
+     * @return Path[]
      */
     public function getPaths(): array
     {
