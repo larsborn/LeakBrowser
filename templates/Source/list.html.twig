@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <ul>
+        {% for aggregate in sources %}
+            <li>
+                <a href="{{ path('app_source_show', {'sourceId': aggregate.source.idSuffix}) }}">{{ aggregate.source.name }}</a>
+                ({{ aggregate.count }})
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

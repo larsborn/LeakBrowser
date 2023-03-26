@@ -12,7 +12,7 @@ class Sample
     private string $sha1;
     private string $sha256;
     private int $size;
-    private string $fileMagic;
+    private ?string $fileMagic;
 
     /**
      * @var string[]
@@ -26,8 +26,8 @@ class Sample
         string $sha1,
         string $sha256,
         int $size,
-        string $fileMagic,
-        array $fileNames,
+        ?string $fileMagic,
+        ?array $fileNames,
     ) {
         $this->id = $id;
         $this->crc32 = $crc32;
@@ -36,7 +36,7 @@ class Sample
         $this->sha256 = $sha256;
         $this->size = $size;
         $this->fileMagic = $fileMagic;
-        $this->fileNames = $fileNames;
+        $this->fileNames = $fileNames === null ? [] : $fileNames;
     }
 
     public function getId(): string
@@ -69,7 +69,7 @@ class Sample
         return $this->size;
     }
 
-    public function getFileMagic(): string
+    public function getFileMagic(): ?string
     {
         return $this->fileMagic;
     }

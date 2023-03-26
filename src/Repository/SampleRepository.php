@@ -29,8 +29,8 @@ class SampleRepository extends AbstractArangoRepository
             InputHelper::string($document->get('sha1')),
             InputHelper::string($document->get('sha256')),
             InputHelper::int($document->get('size')),
-            InputHelper::string($document->get('file_magic')),
-            InputHelper::array($document->get('file_names'))
+            InputHelper::nullableString($document->get('file_magic')),
+            InputHelper::nullableArray($document->get('file_names'))
         );
     }
 

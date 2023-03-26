@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\SourceWithCount;
 use App\Repository\SampleRepository;
 use App\Repository\SourceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/leak')]
-class LeakController extends AbstractController
+#[Route('/source')]
+class SourceController extends AbstractController
 {
     private SourceRepository $sourceRepository;
     private SampleRepository $sampleRepository;
@@ -21,15 +22,28 @@ class LeakController extends AbstractController
         $this->sampleRepository = $sampleRepository;
     }
 
+    #[Route('/')]
+    public function list(): Response
+    {
+        $sources = [];
+        foreach ($this->sourceRepository->findAll() as $source) {
+            $sources[] = new SourceWithCount(
+                $source,
+                $this->sampleRepository->countBySource($source),
+            );
+        }
+
+        return $this->render('Source/list.html.twig', ['sources' => $sources]);
+    }
     #[Route('/{sourceId}')]
-    public function bySource(string $sourceId): Response
+    public function show(string $sourceId): Response
     {
         $source = $this->sourceRepository->get(sprintf('sources/%s', $sourceId));
         if ($source === null) {
             throw new NotFoundHttpException(sprintf('source with id suffix "%s" not found', $sourceId));
         }
 
-        return $this->render('source.html.twig', [
+        return $this->render('Source/show.html.twig', [
             'source' => $source,
             'samples' => $this->sampleRepository->findBySource($source),
         ]);
