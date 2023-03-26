@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class GlobalSearchType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->setMethod('POST')

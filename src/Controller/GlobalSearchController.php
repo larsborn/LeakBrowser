@@ -28,15 +28,14 @@ class GlobalSearchController extends AbstractController
     {
         $dto = new GlobalSearchDTO();
         $form = $this->createForm(GlobalSearchType::class, $dto, [
-            'action' => $this->generateUrl('app_globalsearch_form')
+            'action' => $this->generateUrl('app_globalsearch_form'),
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($this->searchService->isSha256($dto->term)) {
                 $sample = $this->sampleRepository->get($dto->term);
                 if ($sample !== null) {
-                    // TODO redirect to sample
-                    return $this->redirect($this->generateUrl('app_home_home'));
+                    return $this->redirect($this->generateUrl('app_sample_sample', ['sha256' => $sample->getSha256()]));
                 }
             }
             // TODO execute search in leak names for example
