@@ -1,63 +1,129 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <h2>{{ sample.sha256 }}</h2>
-    <div class="row">
-        <div class="col-4">
-            <h3>Metadata</h3>
-            <dl class="row">
-                <dt class="col-sm-3">SHA256</dt>
-                <dd class="col-sm-9 text-truncate">{{ sample.sha256 }}</dd>
-                <dt class="col-sm-3">MD5</dt>
-                <dd class="col-sm-9">{{ sample.md5 }}</dd>
-                <dt class="col-sm-3">SHA1</dt>
-                <dd class="col-sm-9">{{ sample.sha1 }}</dd>
-                <dt class="col-sm-3">CRC32</dt>
-                <dd class="col-sm-9">{{ sample.crc32 }}</dd>
-                {% if sample.size %}
-                    <dt class="col-sm-3">Size</dt>
-                    <dd class="col-sm-9">{{ sample.size|fileSize }}</dd>
-                {% endif %}
-                {% if sample.fileMagic %}
-                    <dt class="col-sm-3">Magic</dt>
-                    <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
-                {% endif %}
-                {% if sample.fileNames %}
-                    <dt class="col-sm-3">Names</dt>
-                    <dd class="col-sm-9">{{ sample.fileNames|join(', ') }}</dd>
-                {% endif %}
-            </dl>
+    <ul class="nav nav-tabs" id="sampleTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="metadata-tab" data-bs-toggle="tab" data-bs-target="#metadata"
+                    type="button"
+                    role="tab" aria-controls="metadata" aria-selected="true">
+                Metadata
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="relatedFiles-tab" data-bs-toggle="tab" data-bs-target="#relatedFiles"
+                    type="button"
+                    role="tab" aria-controls="relatedFiles" aria-selected="false">Related Files
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button"
+                    role="tab" aria-controls="email" aria-selected="false">E-Mail
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="sampleTabContent">
+        <div class="tab-pane fade show active" id="metadata" role="tabpanel" aria-labelledby="metadata-tab">
+            <div class="row">
+                <div class="col-4">
+                    <dl class="row">
+                        <dt class="col-sm-3">SHA256</dt>
+                        <dd class="col-sm-9 text-truncate">{{ sample.sha256 }}</dd>
+                        <dt class="col-sm-3">MD5</dt>
+                        <dd class="col-sm-9">{{ sample.md5 }}</dd>
+                        <dt class="col-sm-3">SHA1</dt>
+                        <dd class="col-sm-9">{{ sample.sha1 }}</dd>
+                        <dt class="col-sm-3">CRC32</dt>
+                        <dd class="col-sm-9">{{ sample.crc32 }}</dd>
+                        {% if sample.size %}
+                            <dt class="col-sm-3">Size</dt>
+                            <dd class="col-sm-9">{{ sample.size|fileSize }}</dd>
+                        {% endif %}
+                        {% if sample.fileMagic %}
+                            <dt class="col-sm-3">Magic</dt>
+                            <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
+                        {% endif %}
+                        {% if sample.fileNames %}
+                            <dt class="col-sm-3">Names</dt>
+                            <dd class="col-sm-9">{{ sample.fileNames|join(', ') }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
         </div>
-        <div class="col-4">
-            <h3>Child Files</h3>
-            {% if children|length == 0 %}
-                <i>No child files</i>
+        <div class="tab-pane fade" id="relatedFiles" role="tabpanel" aria-labelledby="relatedFiles-tab">
+            {% if children|length+parents|length == 0 %}
+                <i>No related files</i>
             {% else %}
-                <ul>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>SHA256</th>
+                        <th>Size</th>
+                        <th>Filenames</th>
+                        <th>Timestamps</th>
+                        <th>Processor</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for subfile in children %}
-                        <li>
-                            <a href="{{ path('app_sample_sample', {sha256: subfile.child.sha256}) }}">
+                        <tr>
+                            <td>Child</td>
+                            <td>
+                                <a href="{{ path('app_sample_sample', {'sha256': subfile.child.sha256}) }}"><i
+                                        class="fa-solid fa-eye"></i></a>
                                 {{ subfile.child.sha256 }}
-                            </a>{% if subfile.child.size %} ({{ subfile.child.size|fileSize }}){% endif %}
-                        </li>
+                            </td>
+                            <td>{{ subfile.child.size ? subfile.child.size|fileSize : '-' }}</td>
+                            <td>
+                                {{ sample.fileNames|join(" ") }}
+                                {% for path in subfile.paths %}
+                                    {{ path.fileName }}
+                                {% endfor %}
+                            </td>
+                        </tr>
                     {% endfor %}
-                </ul>
+                    {% for subfile in parents %}
+                        <tr>
+                            <td>Parent</td>
+                            <td>
+                                <a href="{{ path('app_sample_sample', {'sha256': subfile.parent.sha256}) }}"><i
+                                        class="fa-solid fa-eye"></i></a>
+                                {{ subfile.parent.sha256 }}
+                            </td>
+                            <td>{{ subfile.parent.size ? subfile.parent.size|fileSize : '-' }}</td>
+                            <td>
+                                {{ sample.fileNames|join(" ") }}
+                                {% for path in subfile.paths %}
+                                    {{ path.fileName }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for path in subfile.paths %}
+                                    {% for timestamp in path.timestamps %}
+                                        {% if timestamp.description is empty %}
+                                            {{ timestamp.value|formatDateTimeAllowEmpty }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <dl class="row">
+                                    {% for timestamp in path.timestamps %}
+                                        {% if timestamp.description is not empty %}
+                                            <dt class="col-sm-3">{{ timestamp.description }}</dt>
+                                            <dd class="col-sm-9 text-truncate">{{ timestamp.value|formatDateTimeAllowEmpty }}</dd>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </dl>
+                                {% endfor %}
+                            </td>
+                            <td>{% for path in subfile.paths %}{{ path.processorName }} {% endfor %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endif %}
         </div>
-        <div class="col-4">
-            <h3>Parent Files</h3>
-            {% if parents|length == 0 %}
-                <i>No parent files</i>
-            {% else %}
-                <ul>
-                    {% for subfile in parents %}
-                        <li>
-                            <a href="{{ path('app_sample_sample', {sha256: subfile.parent.sha256}) }}">
-                                {{ subfile.parent.sha256 }}
-                            </a> ({{ subfile.parent.size|fileSize }})
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+        <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+            TODO
         </div>
     </div>
 {% endblock %}
