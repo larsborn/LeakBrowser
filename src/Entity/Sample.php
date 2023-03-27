@@ -81,4 +81,13 @@ class Sample
     {
         return $this->fileNames;
     }
+
+    public function isEmail(): bool
+    {
+        if (! $this->fileMagic) {
+            return false;
+        }
+
+        return stripos($this->fileMagic, 'mail') !== false;
+    }
 }
