@@ -1,9 +1,13 @@
 {% macro emailAddressList(email_lst, name_lst) %}
     {% for email in email_lst %}
+        {% set spl = email|split('@') %}
         {% if name_lst[loop.index0] is defined %}
-            {{ name_lst[loop.index0] }} &lt;{{ email }}&gt;
+            <a href="#"><i class="fa-brands fa-searchengin"></i></a> {{ name_lst[loop.index0] }}
+            &lt;<a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ spl[0] }}@<a href="#"><i
+                class="fa-brands fa-searchengin"></i></a>{{ spl[1] }}&gt;
         {% else %}
-            {{ email }}
+            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ spl[0] }}@<a href="#"><i
+                class="fa-brands fa-searchengin"></i></a>{{ spl[1] }}
         {% endif %}
         {% if not loop.last %},{% endif %}
     {% endfor %}

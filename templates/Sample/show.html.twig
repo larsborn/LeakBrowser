@@ -85,6 +85,24 @@
                                     {{ path.fileName }}
                                 {% endfor %}
                             </td>
+                            <td>
+                                {% for path in subfile.paths %}
+                                    {% for timestamp in path.timestamps %}
+                                        {% if timestamp.description is empty %}
+                                            {{ timestamp.value|formatDateTimeAllowEmpty }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <dl class="row">
+                                        {% for timestamp in path.timestamps %}
+                                            {% if timestamp.description is not empty %}
+                                                <dt class="col-sm-3">{{ timestamp.description }}</dt>
+                                                <dd class="col-sm-9 text-truncate">{{ timestamp.value|formatDateTimeAllowEmpty }}</dd>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </dl>
+                                {% endfor %}
+                            </td>
+                            <td>{% for path in subfile.paths %}{{ path.processorName }} {% endfor %}</td>
                         </tr>
                     {% endfor %}
                     {% for subfile in parents %}
@@ -195,20 +213,47 @@
                     {% endif %}
                     <dt class="col-sm-3">Subject</dt>
                     <dd class="col-sm-9 text-truncate">{{ sample.email.subject }}</dd>
+                    {% if sample.email.organization is defined %}
+                        <dt class="col-sm-3">Organization</dt>
+                        <dd class="col-sm-9 text-truncate">{{ sample.email.organization }}</dd>
+                    {% endif %}
                     <dt class="col-sm-3">Thread Topic</dt>
                     <dd class="col-sm-9 text-truncate">{{ sample.email.thread_topic }}</dd>
                     <dt class="col-sm-3">Thread Index</dt>
-                    <dd class="col-sm-9 text-truncate">{{ sample.email.thread_index }}</dd>
-                    <dt class="col-sm-3">Message UUID@Host ID</dt>
                     <dd class="col-sm-9 text-truncate">
-                        {{ sample.email.message_uuid }}@{{ sample.email.message_host_id }}
+                        <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
                     </dd>
-                    <dt class="col-sm-3">References</dt>
-                    <dd class="col-sm-9 text-truncate">
-                        {% for reference in sample.email.references %}
-                            {{ reference.uuid }}@{{ reference.host_id }}<br/>
-                        {% endfor %}
-                    </dd>
+                    {% if sample.email.message_uuid is defined or sample.email.message_host_id is defined %}
+                        <dt class="col-sm-3">Message UUID@Host ID</dt>
+                        <dd class="col-sm-9 text-truncate">
+                            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_uuid }}@<a
+                                href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_host_id }}
+                        </dd>
+                    {% endif %}
+                    {% if sample.email.list_uuid is defined or sample.email.list_host_id is defined %}
+                        <dt class="col-sm-3">List UUID@Host ID</dt>
+                        <dd class="col-sm-9 text-truncate">
+                            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}@<a
+                                href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
+                        </dd>
+                    {% endif %}
+                    {% if sample.email.content_uuid is defined or sample.email.content_host_id is defined %}
+                        <dt class="col-sm-3">Content UUID@Host ID</dt>
+                        <dd class="col-sm-9 text-truncate">
+                            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.content_uuid }}@<a
+                                href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.content_host_id }}
+                        </dd>
+                    {% endif %}
+                    {% if sample.email.references is defined %}
+                        <dt class="col-sm-3">References</dt>
+                        <dd class="col-sm-9 text-truncate">
+                            {% for reference in sample.email.references %}
+                                <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ reference.uuid }}@<a
+                                href="#"><i
+                                    class="fa-brands fa-searchengin"></i></a>{{ reference.host_id }}<br/>
+                            {% endfor %}
+                        </dd>
+                    {% endif %}
                     <dt class="col-sm-3">Date</dt>
                     <dd class="col-sm-9 text-truncate">{{ sample.email.date }}</dd>
                     {% if sample.email.received %}
@@ -223,7 +268,9 @@
 
                     {% endfor %}
                 </dl>
-                {{ sample.email.body|nl2br }}
+                {% if sample.email.body is defined %}
+                    {{ sample.email.body|nl2br }}
+                {% endif %}
             </div>
         {% endif %}
     </div>
