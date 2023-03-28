@@ -76,7 +76,7 @@ class SubfileRepository extends AbstractArangoRepository
         return array_map(
             fn (Document $row) => $this->constructEntity($row),
             $this->aql(
-                'FOR edge in subfile FILTER edge._from == @source LIMIT @offset, @limit RETURN edge',
+                'FOR edge in subfile FILTER edge._from == @source SORT edge._to LIMIT @offset, @limit RETURN edge',
                 ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
             )
         );
