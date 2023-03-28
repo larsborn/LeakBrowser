@@ -35,7 +35,9 @@ class GlobalSearchController extends AbstractController
             if ($this->searchService->isSha256($dto->term)) {
                 $sample = $this->sampleRepository->get($dto->term);
                 if ($sample !== null) {
-                    return $this->redirect($this->generateUrl('app_sample_sample', ['sha256' => $sample->getSha256()]));
+                    return $this->redirect(
+                        $this->generateUrl('app_sample_metadata', ['sha256' => $sample->getSha256()])
+                    );
                 }
             }
             // TODO execute search in leak names for example
