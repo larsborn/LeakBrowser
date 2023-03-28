@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/search')]
-class GlobalSearchController extends AbstractController
+class SearchController extends AbstractController
 {
     private SearchService $searchService;
     private SampleRepository $sampleRepository;
@@ -23,12 +23,12 @@ class GlobalSearchController extends AbstractController
         $this->sampleRepository = $sampleRepository;
     }
 
-    #[Route('/results')]
+    #[Route('/form')]
     public function form(Request $request): Response
     {
         $dto = new GlobalSearchDTO();
         $form = $this->createForm(GlobalSearchType::class, $dto, [
-            'action' => $this->generateUrl('app_globalsearch_form'),
+            'action' => $this->generateUrl('app_search_form'),
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -40,9 +40,18 @@ class GlobalSearchController extends AbstractController
                     );
                 }
             }
-            // TODO execute search in leak names for example
+
+            return $this->redirect($this->generateUrl('app_search_results', ['query' => $dto->term]));
         }
 
-        return $this->render('Global/search.html.twig', ['form' => $form->createView()]);
+        return $this->render('Search/form.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/results')]
+    public function results(Request $request): Response
+    {
+        $query = $request->get('query');
+
+        return $this->render('Search/results.html.twig', ['query' => $query]);
     }
 }
