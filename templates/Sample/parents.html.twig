@@ -1,0 +1,58 @@
+{% extends 'Sample/base.html.twig' %}
+{% import 'macros.html.twig' as macro %}
+
+{% block tabContent %}
+    {% if samples|length == 0 %}
+        <i>No related files</i>
+    {% else %}
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>SHA256</th>
+                <th>Size</th>
+                <th>Filenames</th>
+                <th>Timestamps</th>
+                <th>Processor</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subfile in samples %}
+                <tr>
+                    <td>Parent</td>
+                    <td>
+                        <a href="{{ path('app_sample_metadata', {'sha256': subfile.parent.sha256}) }}"><i
+                                class="fa-solid fa-eye"></i></a>
+                        {{ subfile.parent.sha256 }}
+                    </td>
+                    <td>{{ subfile.parent.size ? subfile.parent.size|fileSize : '-' }}</td>
+                    <td>
+                        {{ sample.fileNames|join(" ") }}
+                        {% for path in subfile.paths %}
+                            {{ path.fileName }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for path in subfile.paths %}
+                            {% for timestamp in path.timestamps %}
+                                {% if timestamp.description is empty %}
+                                    {{ timestamp.value|formatDateTimeAllowEmpty }}
+                                {% endif %}
+                            {% endfor %}
+                            <dl class="row">
+                                {% for timestamp in path.timestamps %}
+                                    {% if timestamp.description is not empty %}
+                                        <dt class="col-sm-3">{{ timestamp.description }}</dt>
+                                        <dd class="col-sm-9 text-truncate">{{ timestamp.value|formatDateTimeAllowEmpty }}</dd>
+                                    {% endif %}
+                                {% endfor %}
+                            </dl>
+                        {% endfor %}
+                    </td>
+                    <td>{% for path in subfile.paths %}{{ path.processorName }} {% endfor %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

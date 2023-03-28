@@ -22,19 +22,64 @@ class SampleController extends AbstractController
     }
 
     #[Route('/{sha256}')]
-    public function sample(string $sha256): Response
+    public function metadata(string $sha256): Response
     {
         $sample = $this->sampleRepository->get($sha256);
         if ($sample === null) {
             throw new NotFoundHttpException();
         }
 
-        return $this->render('Sample/show.html.twig', [
+        return $this->render('Sample/metadata.html.twig', [
             'sample' => $sample,
             'childrenCount' => $this->subfileRepository->countChildren($sample),
-            'children' => $this->subfileRepository->findChildren($sample),
             'parentsCount' => $this->subfileRepository->countParents($sample),
-            'parents' => $this->subfileRepository->findParents($sample),
+        ]);
+    }
+
+    #[Route('/{sha256}/children')]
+    public function children(string $sha256): Response
+    {
+        $sample = $this->sampleRepository->get($sha256);
+        if ($sample === null) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('Sample/children.html.twig', [
+            'sample' => $sample,
+            'childrenCount' => $this->subfileRepository->countChildren($sample),
+            'parentsCount' => $this->subfileRepository->countParents($sample),
+            'samples' => $this->subfileRepository->findChildren($sample),
+        ]);
+    }
+
+    #[Route('/{sha256}/parents')]
+    public function parents(string $sha256): Response
+    {
+        $sample = $this->sampleRepository->get($sha256);
+        if ($sample === null) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('Sample/parents.html.twig', [
+            'sample' => $sample,
+            'childrenCount' => $this->subfileRepository->countChildren($sample),
+            'parentsCount' => $this->subfileRepository->countParents($sample),
+            'samples' => $this->subfileRepository->findParents($sample),
+        ]);
+    }
+
+    #[Route('/{sha256}/email')]
+    public function email(string $sha256): Response
+    {
+        $sample = $this->sampleRepository->get($sha256);
+        if ($sample === null) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('Sample/email.html.twig', [
+            'sample' => $sample,
+            'childrenCount' => $this->subfileRepository->countChildren($sample),
+            'parentsCount' => $this->subfileRepository->countParents($sample),
         ]);
     }
 }

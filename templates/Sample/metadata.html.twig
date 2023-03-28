@@ -1,0 +1,30 @@
+{% extends 'Sample/base.html.twig' %}
+
+{% block tabContent %}
+    <div class="row">
+        <div class="col-4">
+            <dl class="row">
+                <dt class="col-sm-3">SHA256</dt>
+                <dd class="col-sm-9 text-truncate">{{ sample.sha256 }}</dd>
+                <dt class="col-sm-3">MD5</dt>
+                <dd class="col-sm-9">{{ sample.md5 }}</dd>
+                <dt class="col-sm-3">SHA1</dt>
+                <dd class="col-sm-9">{{ sample.sha1 }}</dd>
+                <dt class="col-sm-3">CRC32</dt>
+                <dd class="col-sm-9">{{ sample.crc32 }}</dd>
+                {% if sample.size %}
+                    <dt class="col-sm-3">Size</dt>
+                    <dd class="col-sm-9">{{ sample.size|fileSize }}</dd>
+                {% endif %}
+                {% if sample.fileMagic %}
+                    <dt class="col-sm-3">Magic</dt>
+                    <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
+                {% endif %}
+                {% if sample.fileNames %}
+                    <dt class="col-sm-3">Names</dt>
+                    <dd class="col-sm-9">{{ sample.fileNames|join(', ') }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+{% endblock %}
