@@ -129,6 +129,9 @@
         {% endfor %}
     </dl>
     {% if sample.email.body is defined %}
-        {{ sample.email.body|nl2br }}
+        <div class="card">
+            <div class="card-header">E-Mail Body</div>
+            <div class="card-body">{{ sample.email.body|nl2br }}</div>
+        </div>
     {% endif %}
 {% endblock %}

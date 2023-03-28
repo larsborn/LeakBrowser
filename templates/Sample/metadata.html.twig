@@ -11,18 +11,23 @@
                 <dt class="col-sm-3">SHA1</dt>
                 <dd class="col-sm-9">{{ sample.sha1 }}</dd>
                 <dt class="col-sm-3">CRC32</dt>
-                <dd class="col-sm-9">{{ sample.crc32 }}</dd>
+                <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.crc32 }}</dd>
                 {% if sample.size %}
                     <dt class="col-sm-3">Size</dt>
-                    <dd class="col-sm-9">{{ sample.size|fileSize }}</dd>
+                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.size|fileSize }}</dd>
                 {% endif %}
                 {% if sample.fileMagic %}
                     <dt class="col-sm-3">Magic</dt>
-                    <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
+                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.fileMagic }}</dd>
                 {% endif %}
                 {% if sample.fileNames %}
                     <dt class="col-sm-3">Names</dt>
-                    <dd class="col-sm-9">{{ sample.fileNames|join(', ') }}</dd>
+                    <dd class="col-sm-9">
+                        {% for fileName in sample.fileNames %}
+                            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ fileName }}
+                            {% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    </dd>
                 {% endif %}
             </dl>
         </div>
