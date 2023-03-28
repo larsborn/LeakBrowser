@@ -31,7 +31,9 @@ class SampleController extends AbstractController
 
         return $this->render('Sample/show.html.twig', [
             'sample' => $sample,
+            'childrenCount' => $this->subfileRepository->countChildren($sample),
             'children' => $this->subfileRepository->findChildren($sample),
+            'parentsCount' => $this->subfileRepository->countParents($sample),
             'parents' => $this->subfileRepository->findParents($sample),
         ]);
     }

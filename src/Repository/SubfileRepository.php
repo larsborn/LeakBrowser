@@ -71,13 +71,13 @@ class SubfileRepository extends AbstractArangoRepository
     /**
      * @return Subfile[]
      */
-    public function findChildren(Sample $sample): array
+    public function findChildren(Sample $sample, int $limit = 10, int $offset = 0): array
     {
         return array_map(
             fn(Document $row) => $this->constructEntity($row),
             $this->aql(
-                'FOR edge in subfile FILTER edge._from == @source RETURN edge',
-                ['source' => $sample->getId()]
+                'FOR edge in subfile FILTER edge._from == @source LIMIT @offset, @limit RETURN edge',
+                ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
             )
         );
     }
@@ -85,14 +85,30 @@ class SubfileRepository extends AbstractArangoRepository
     /**
      * @return Subfile[]
      */
-    public function findParents(Sample $sample): array
+    public function findParents(Sample $sample, int $limit = 10, int $offset = 0): array
     {
         return array_map(
             fn(Document $row) => $this->constructEntity($row),
             $this->aql(
-                'FOR edge in subfile FILTER edge._to == @source RETURN edge',
-                ['source' => $sample->getId()]
+                'FOR edge in subfile FILTER edge._to == @source LIMIT @offset, @limit RETURN edge',
+                ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
             )
         );
+    }
+
+    public function countChildren(Sample $sample): int
+    {
+        return $this->aql(
+            'FOR edge in subfile FILTER edge._from == @source COLLECT WITH COUNT INTO length RETURN length',
+            ['source' => $sample->getId()]
+        )[0];
+    }
+
+    public function countParents(Sample $sample): int
+    {
+        return $this->aql(
+            'FOR edge in subfile FILTER edge._to == @source COLLECT WITH COUNT INTO length RETURN length',
+            ['source' => $sample->getId()]
+        )[0];
     }
 }
