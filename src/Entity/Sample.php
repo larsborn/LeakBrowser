@@ -13,6 +13,7 @@ class Sample
     private ?string $sha256;
     private ?int $size;
     private ?string $fileMagic;
+    private ?array $email;
 
     /**
      * @var string[]
@@ -28,6 +29,7 @@ class Sample
         ?int $size,
         ?string $fileMagic,
         ?array $fileNames,
+        ?array $email,
     ) {
         $this->id = $id;
         $this->crc32 = $crc32;
@@ -37,6 +39,7 @@ class Sample
         $this->size = $size;
         $this->fileMagic = $fileMagic;
         $this->fileNames = $fileNames === null ? [] : $fileNames;
+        $this->email = $email;
     }
 
     public function getId(): string
@@ -89,5 +92,10 @@ class Sample
         }
 
         return stripos($this->fileMagic, 'mail') !== false;
+    }
+
+    public function getEmail(): ?array
+    {
+        return $this->email;
     }
 }

@@ -1,4 +1,6 @@
 {% extends "base.html.twig" %}
+{% import 'macros.html.twig' as macro %}
+
 {% block body %}
     <h2>{{ sample.sha256 }}</h2>
     <ul class="nav nav-tabs" id="sampleTab" role="tablist">
@@ -126,7 +128,102 @@
         </div>
         {% if sample.email %}
             <div class="tab-pane fade show active" id="email" role="tabpanel" aria-labelledby="email-tab">
-                TODO
+                <dl class="row">
+                    {% if sample.email.from is defined %}
+                        <dt class="col-sm-3">From</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.from, sample.email.from_names is defined ? sample.email.from_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.to is defined %}
+                        <dt class="col-sm-3">To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.to, sample.email.to_names is defined ? sample.email.to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.cc is defined %}
+                        <dt class="col-sm-3">CC</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.cc, sample.email.cc_names is defined ? sample.email.cc_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.bcc is defined %}
+                        <dt class="col-sm-3">BCC</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.bcc, sample.email.bcc_names is defined ? sample.email.bcc_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.in_reply_to is defined %}
+                        <dt class="col-sm-3">In-Reply-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.in_reply_to, sample.email.in_reply_to_names is defined ? sample.email.in_reply_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.return_path is defined %}
+                        <dt class="col-sm-3">Return-Path</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.return_path, sample.email.return_path_names is defined ? sample.email.return_path_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.reply_to is defined %}
+                        <dt class="col-sm-3">Reply-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.reply_to, sample.email.reply_to_names is defined ? sample.email.reply_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.return_receipt_to is defined %}
+                        <dt class="col-sm-3">Return-Receipt-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.return_receipt_to, sample.email.return_receipt_to_names is defined ? sample.email.return_receipt_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.sender is defined %}
+                        <dt class="col-sm-3">Sender</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.sender, sample.email.sender_names is defined ? sample.email.sender_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.envelope_from is defined %}
+                        <dt class="col-sm-3">Envelope-From</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.envelope_from, sample.email.envelope_from_names is defined ? sample.email.envelope_from_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.envelope_to is defined %}
+                        <dt class="col-sm-3">Envelope-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.envelope_to, sample.email.envelope_to_names is defined ? sample.email.envelope_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.disposition_notification_to is defined %}
+                        <dt class="col-sm-3">Disposition-Notification-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.disposition_notification_to, sample.email.disposition_notification_to_names is defined ? sample.email.disposition_notification_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.return_receipt_to is defined %}
+                        <dt class="col-sm-3">Return-Receipt-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.return_receipt_to, sample.email.return_receipt_to_names is defined ? sample.email.return_receipt_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.abuse_reports_to is defined %}
+                        <dt class="col-sm-3">Abuse-Reports-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.abuse_reports_to, sample.email.abuse_reports_to_names is defined ? sample.email.abuse_reports_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.mail_reply_to is defined %}
+                        <dt class="col-sm-3">Mail-Reply-To</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.mail_reply_to, sample.email.mail_reply_to_names is defined ? sample.email.mail_reply_to_names : []) }}</dd>
+                    {% endif %}
+                    {% if sample.email.savedfromemail is defined %}
+                        <dt class="col-sm-3">Savedfromemail</dt>
+                        <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.savedfromemail, sample.email.savedfromemail_names is defined ? sample.email.savedfromemail_names : []) }}</dd>
+                    {% endif %}
+                    <dt class="col-sm-3">Subject</dt>
+                    <dd class="col-sm-9 text-truncate">{{ sample.email.subject }}</dd>
+                    <dt class="col-sm-3">Thread Topic</dt>
+                    <dd class="col-sm-9 text-truncate">{{ sample.email.thread_topic }}</dd>
+                    <dt class="col-sm-3">Thread Index</dt>
+                    <dd class="col-sm-9 text-truncate">{{ sample.email.thread_index }}</dd>
+                    <dt class="col-sm-3">Message UUID@Host ID</dt>
+                    <dd class="col-sm-9 text-truncate">
+                        {{ sample.email.message_uuid }}@{{ sample.email.message_host_id }}
+                    </dd>
+                    <dt class="col-sm-3">References</dt>
+                    <dd class="col-sm-9 text-truncate">
+                        {% for reference in sample.email.references %}
+                            {{ reference.uuid }}@{{ reference.host_id }}<br/>
+                        {% endfor %}
+                    </dd>
+                    <dt class="col-sm-3">Date</dt>
+                    <dd class="col-sm-9 text-truncate">{{ sample.email.date }}</dd>
+                    {% if sample.email.received %}
+                        <dt class="col-sm-3">Received</dt>
+                        <dd class="col-sm-9">
+                            {% for receivedLine in sample.email.received %}
+                                {{ receivedLine }}<br>
+                            {% endfor %}
+                        </dd>
+                    {% endif %}
+                    {% for x_header in sample.email.x_headers %}
+
+                    {% endfor %}
+                </dl>
+                {{ sample.email.body|nl2br }}
             </div>
         {% endif %}
     </div>

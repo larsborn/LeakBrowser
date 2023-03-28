@@ -30,7 +30,8 @@ class SampleRepository extends AbstractArangoRepository
             InputHelper::nullableString($document->get('sha256')),
             InputHelper::nullableInt($document->get('size')),
             InputHelper::nullableString($document->get('file_magic')),
-            InputHelper::nullableArray($document->get('file_names'))
+            InputHelper::nullableArray($document->get('file_names')),
+            InputHelper::nullableArray($document->get('email')),
         );
     }
 

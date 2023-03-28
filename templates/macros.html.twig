@@ -1,0 +1,10 @@
+{% macro emailAddressList(email_lst, name_lst) %}
+    {% for email in email_lst %}
+        {% if name_lst[loop.index0] is defined %}
+            {{ name_lst[loop.index0] }} &lt;{{ email }}&gt;
+        {% else %}
+            {{ email }}
+        {% endif %}
+        {% if not loop.last %},{% endif %}
+    {% endfor %}
+{% endmacro %}
