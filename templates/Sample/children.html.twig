@@ -11,8 +11,8 @@
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>Type</th>
                 <th>SHA256</th>
+                <th>Magic</th>
                 <th>Size</th>
                 <th>Filenames</th>
                 <th>Timestamps</th>
@@ -22,12 +22,12 @@
             <tbody>
             {% for subfile in samples %}
                 <tr>
-                    <td>Child</td>
                     <td>
                         <a href="{{ path('app_sample_metadata', {'sha256': subfile.child.sha256}) }}"><i
                                 class="fa-solid fa-eye"></i></a>
                         {{ subfile.child.sha256 }}
                     </td>
+                    <td>{{ subfile.child.fileMagic ? subfile.child.fileMagic : '-' }}</td>
                     <td>{{ subfile.child.size ? subfile.child.size|fileSize : '-' }}</td>
                     <td>
                         {{ sample.fileNames|join(" ") }}
