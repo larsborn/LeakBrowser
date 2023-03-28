@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\SampleRepository;
 use App\Repository\SubfileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,34 +38,46 @@ class SampleController extends AbstractController
     }
 
     #[Route('/{sha256}/children')]
-    public function children(string $sha256): Response
+    public function children(Request $request, string $sha256): Response
     {
+        $itemsPerPage = 10;
+        $page = (int)$request->get('page', 0);
         $sample = $this->sampleRepository->get($sha256);
         if ($sample === null) {
             throw new NotFoundHttpException();
         }
+        $totalCount = $this->subfileRepository->countChildren($sample);
 
         return $this->render('Sample/children.html.twig', [
             'sample' => $sample,
-            'childrenCount' => $this->subfileRepository->countChildren($sample),
+            'childrenCount' => $totalCount,
             'parentsCount' => $this->subfileRepository->countParents($sample),
-            'samples' => $this->subfileRepository->findChildren($sample),
+            'samples' => $this->subfileRepository->findChildren($sample, $itemsPerPage, $page * $itemsPerPage),
+            'currentPage' => $page,
+            'pageCount' => ceil($totalCount / $itemsPerPage),
         ]);
     }
 
     #[Route('/{sha256}/parents')]
-    public function parents(string $sha256): Response
+    public function parents(Request $request, string $sha256): Response
     {
         $sample = $this->sampleRepository->get($sha256);
         if ($sample === null) {
             throw new NotFoundHttpException();
         }
 
+        $itemsPerPage = 10;
+        $page = (int)$request->get('page', 0);
+        $totalCount = $this->subfileRepository->countParents($sample);
+
         return $this->render('Sample/parents.html.twig', [
             'sample' => $sample,
             'childrenCount' => $this->subfileRepository->countChildren($sample),
-            'parentsCount' => $this->subfileRepository->countParents($sample),
+            'parentsCount' => $totalCount,
             'samples' => $this->subfileRepository->findParents($sample),
+            'currentPage' => $page,
+            'pageCount' => ceil($totalCount / $itemsPerPage),
+
         ]);
     }
 
