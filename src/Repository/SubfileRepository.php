@@ -43,7 +43,7 @@ class SubfileRepository extends AbstractArangoRepository
                 Sample::class
             ),
             array_map(
-                fn(array $path) => $this->constructPath($path),
+                fn (array $path) => $this->constructPath($path),
                 $document->get('paths')
             ),
         );
@@ -59,7 +59,7 @@ class SubfileRepository extends AbstractArangoRepository
             isset($path['email_subject']) ? InputHelper::string($path['email_subject']) : null,
             isset($path['email_sender_name']) ? InputHelper::string($path['email_sender_name']) : null,
             $timestamps === null ? [] : array_map(
-                fn(array $row) => new Timestamp(
+                fn (array $row) => new Timestamp(
                     new DateTimeImmutable($row['value']),
                     isset($row['description']) ? InputHelper::string($row['description']) : null,
                 ),
@@ -74,7 +74,7 @@ class SubfileRepository extends AbstractArangoRepository
     public function findChildren(Sample $sample, int $limit = 10, int $offset = 0): array
     {
         return array_map(
-            fn(Document $row) => $this->constructEntity($row),
+            fn (Document $row) => $this->constructEntity($row),
             $this->aql(
                 'FOR edge in subfile FILTER edge._from == @source LIMIT @offset, @limit RETURN edge',
                 ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
@@ -88,7 +88,7 @@ class SubfileRepository extends AbstractArangoRepository
     public function findParents(Sample $sample, int $limit = 10, int $offset = 0): array
     {
         return array_map(
-            fn(Document $row) => $this->constructEntity($row),
+            fn (Document $row) => $this->constructEntity($row),
             $this->aql(
                 'FOR edge in subfile FILTER edge._to == @source LIMIT @offset, @limit RETURN edge',
                 ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
