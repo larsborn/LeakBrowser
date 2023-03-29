@@ -103,4 +103,41 @@ AQL,
             )
         );
     }
+
+    /**
+     * @param string[] $array
+     * @return string[]
+     */
+    public function findByMagics(array $magics, int $limit = 10, int $offset = 0): array
+    {
+        return array_map(
+            fn(Document $row) => $this->constructEntity($row),
+            $this->aql(
+                <<<AQL
+FOR sample IN samples
+    FILTER sample.file_magic IN @magics
+    SORT sample.sha256
+    LIMIT @offset, @limit
+    RETURN sample
+AQL,
+                ['magics' => $magics, 'limit' => $limit, 'offset' => $offset]
+            )
+        );
+    }
+
+    /**
+     * @param string[] $array
+     */
+    public function countByMagics(array $magics): int
+    {
+        return $this->aql(
+            <<<AQL
+FOR sample IN samples
+    FILTER sample.file_magic IN @magics
+    COLLECT WITH COUNT INTO cnt
+    RETURN cnt
+AQL,
+            ['magics' => $magics]
+        )[0];
+    }
 }
