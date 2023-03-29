@@ -77,7 +77,6 @@ class SampleController extends AbstractController
             'samples' => $this->subfileRepository->findParents($sample),
             'currentPage' => $page,
             'pageCount' => ceil($totalCount / $itemsPerPage),
-
         ]);
     }
 
