@@ -14,7 +14,7 @@
         {% for sample in samples %}
             <tr>
                 <td>
-                    <a href="{{ path('app_sample_sample', {'sha256': sample.sha256}) }}"><i class="fa-solid fa-eye"></i></a>
+                    <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i class="fa-solid fa-eye"></i></a>
                     {{ sample.sha256 }}
                 </td>
                 <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
