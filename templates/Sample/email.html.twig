@@ -130,7 +130,7 @@
         {% endif %}
         <dt class="col-sm-3">Date</dt>
         <dd class="col-sm-9 text-truncate">{{ sample.email.date }}</dd>
-        {% if sample.email.received %}
+        {% if sample.email.received is defined %}
             <dt class="col-sm-3">Received</dt>
             <dd class="col-sm-9">
                 {% for receivedLine in sample.email.received %}
