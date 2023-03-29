@@ -6,6 +6,7 @@ use App\DTO\SourceWithCount;
 use App\Repository\SampleRepository;
 use App\Repository\SourceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,17 +36,24 @@ class SourceController extends AbstractController
 
         return $this->render('Source/list.html.twig', ['sources' => $sources]);
     }
+
     #[Route('/{sourceId}')]
-    public function show(string $sourceId): Response
+    public function show(Request $request, string $sourceId): Response
     {
         $source = $this->sourceRepository->get(sprintf('sources/%s', $sourceId));
         if ($source === null) {
             throw new NotFoundHttpException(sprintf('source with id suffix "%s" not found', $sourceId));
         }
 
+        $itemsPerPage = 10;
+        $page = (int)$request->query->get('page', 0);
+        $totalCount = $this->sampleRepository->countBySource($source);
+
         return $this->render('Source/show.html.twig', [
             'source' => $source,
-            'samples' => $this->sampleRepository->findBySource($source),
+            'samples' => $this->sampleRepository->findBySource($source, $itemsPerPage, $page * $itemsPerPage),
+            'currentPage' => $page,
+            'pageCount' => ceil($totalCount / $itemsPerPage),
         ]);
     }
 }

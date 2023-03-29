@@ -1,7 +1,12 @@
 {% extends "base.html.twig" %}
+{% import "macros.html.twig" as macro %}
+
 {% block body %}
     <h1>{{ source.name }}</h1>
 
+    <div class="d-flex flex-row-reverse bd-highlight">
+        <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
+    </div>
     <table class="table table-striped table-bordered">
         <thead>
         <tr>

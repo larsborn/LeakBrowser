@@ -53,16 +53,17 @@ AQL,
     /**
      * @return Sample[]
      */
-    public function findBySource(Source $source): array
+    public function findBySource(Source $source, int $limit = 10, int $offset = 0): array
     {
         $ret = [];
         foreach ($this->aql(
             <<<AQL
 FOR edge in sample_from_source
     FILTER edge._to == @source
+    LIMIT @offset, @limit
     RETURN edge._from
 AQL,
-            ['source' => $source->getId()]
+            ['source' => $source->getId(), 'offset' => $offset, 'limit' => $limit]
         ) as $id) {
             $ret[] = $this->constructEntity($this->getDocumentHandler()->get($this->getCollectionName(), $id));
         }
