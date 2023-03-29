@@ -41,7 +41,7 @@ class SampleController extends AbstractController
     public function children(Request $request, string $sha256): Response
     {
         $itemsPerPage = 10;
-        $page = (int)$request->get('page', 0);
+        $page = (int)$request->query->get('page', 0);
         $sample = $this->sampleRepository->get($sha256);
         if ($sample === null) {
             throw new NotFoundHttpException();
@@ -67,7 +67,7 @@ class SampleController extends AbstractController
         }
 
         $itemsPerPage = 10;
-        $page = (int)$request->get('page', 0);
+        $page = (int)$request->query->get('page', 0);
         $totalCount = $this->subfileRepository->countParents($sample);
 
         return $this->render('Sample/parents.html.twig', [
