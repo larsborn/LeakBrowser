@@ -46,7 +46,7 @@ abstract class AbstractArangoRepository
     public function getAll(array $ids): array
     {
         return array_map(
-            fn (Document $row) => $this->constructEntity($row),
+            fn(Document $row) => $this->constructEntity($row),
             $this->aql(
                 sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
                 ['ids' => $ids]
@@ -101,5 +101,13 @@ abstract class AbstractArangoRepository
     protected function getDocumentHandler(): DocumentHandler
     {
         return $this->documentHandler;
+    }
+
+    public function countAll(): int
+    {
+        return $this->aql(
+            sprintf('FOR row IN %s COLLECT WITH COUNT INTO cnt RETURN cnt', $this->getCollectionName()),
+            []
+        )[0];
     }
 }

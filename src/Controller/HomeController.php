@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DTO\SourceWithCount;
+use App\Repository\MagicRepository;
 use App\Repository\SampleRepository;
 use App\Repository\SourceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,24 +16,25 @@ class HomeController extends AbstractController
 {
     private SourceRepository $sourceRepository;
     private SampleRepository $sampleRepository;
+    private MagicRepository $magicRepository;
 
-    public function __construct(SourceRepository $sourceRepository, SampleRepository $sampleRepository)
-    {
+    public function __construct(
+        SourceRepository $sourceRepository,
+        SampleRepository $sampleRepository,
+        MagicRepository $magicRepository
+    ) {
         $this->sourceRepository = $sourceRepository;
         $this->sampleRepository = $sampleRepository;
+        $this->magicRepository = $magicRepository;
     }
 
     #[Route('/')]
     public function home(): Response
     {
-        $sources = [];
-        foreach ($this->sourceRepository->findAll() as $source) {
-            $sources[] = new SourceWithCount(
-                $source,
-                $this->sampleRepository->countBySource($source),
-            );
-        }
-
-        return $this->render('home.html.twig', ['sources' => $sources]);
+        return $this->render('home.html.twig', [
+            'sourceCount' => $this->sourceRepository->countAll(),
+            'sampleCount' => $this->sampleRepository->countAll(),
+            'emailCount' => $this->sampleRepository->countByMagics($this->magicRepository->emails()),
+        ]);
     }
 }

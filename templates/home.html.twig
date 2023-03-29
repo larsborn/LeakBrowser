@@ -1,4 +1,15 @@
 {% extends "base.html.twig" %}
 {% block body %}
-
+    <div class="row">
+        <div class="col-4">
+            <dl class="row">
+                <dt class="col-sm-3">Source Count</dt>
+                <dd class="col-sm-9 text-truncate">{{ sourceCount }}</dd>
+                <dt class="col-sm-3">Sample Count</dt>
+                <dd class="col-sm-9 text-truncate">{{ sampleCount }}</dd>
+                <dt class="col-sm-3">Email Count</dt>
+                <dd class="col-sm-9 text-truncate">{{ emailCount }}</dd>
+            </dl>
+        </div>
+    </div>
 {% endblock %}
