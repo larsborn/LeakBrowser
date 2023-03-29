@@ -11,6 +11,7 @@
         <thead>
         <tr>
             <th>SHA256</th>
+            <th>Magic</th>
             <th>Size</th>
             <th>Filenames</th>
         </tr>
@@ -22,6 +23,7 @@
                     <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i class="fa-solid fa-eye"></i></a>
                     {{ sample.sha256 }}
                 </td>
+                <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
                 <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
                 <td>{{ sample.fileNames|join(", ") }}</td>
             </tr>
