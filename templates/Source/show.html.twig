@@ -1,6 +1,8 @@
 {% extends "base.html.twig" %}
 {% import "macros.html.twig" as macro %}
 
+{% block title %}Source "{{ source.name }}"{% endblock %}
+
 {% block body %}
     <h1>{{ source.name }}</h1>
 

@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% import 'macros.html.twig' as macro %}
 
+{% block title %}Search Result for "{{ query }}"{% endblock %}
+
 {% block body %}
     <p>Wildcard Search String: "{{ query }}"</p>
 

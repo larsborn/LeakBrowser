@@ -1,4 +1,7 @@
 {% extends "base.html.twig" %}
+
+{% block title %}Source List ({{ sources|length }}){% endblock %}
+
 {% block body %}
     <ul>
         {% for aggregate in sources %}

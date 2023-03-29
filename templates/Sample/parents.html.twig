@@ -1,6 +1,8 @@
 {% extends 'Sample/base.html.twig' %}
 {% import 'macros.html.twig' as macro %}
 
+{% block title %}{{ sample.sha256 }} parent files{% endblock %}
+
 {% block tabContent %}
     {% if samples|length == 0 %}
         <i>No related files</i>
