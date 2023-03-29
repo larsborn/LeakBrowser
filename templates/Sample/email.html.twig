@@ -77,12 +77,16 @@
             <dt class="col-sm-3">Organization</dt>
             <dd class="col-sm-9 text-truncate">{{ sample.email.organization }}</dd>
         {% endif %}
-        <dt class="col-sm-3">Thread Topic</dt>
-        <dd class="col-sm-9 text-truncate">{{ sample.email.thread_topic }}</dd>
-        <dt class="col-sm-3">Thread Index</dt>
-        <dd class="col-sm-9 text-truncate">
-            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
-        </dd>
+        {% if sample.email.thread_topic is defined %}
+            <dt class="col-sm-3">Thread Topic</dt>
+            <dd class="col-sm-9 text-truncate">{{ sample.email.thread_topic }}</dd>
+        {% endif %}
+        {% if sample.email.thread_index is defined %}
+            <dt class="col-sm-3">Thread Index</dt>
+            <dd class="col-sm-9 text-truncate">
+                <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
+            </dd>
+        {% endif %}
         {% if sample.email.message_uuid is defined or sample.email.message_host_id is defined %}
             <dt class="col-sm-3">Message UUID@Host ID</dt>
             <dd class="col-sm-9 text-truncate">
@@ -90,11 +94,21 @@
                     href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_host_id }}
             </dd>
         {% endif %}
-        {% if sample.email.list_uuid is defined or sample.email.list_host_id is defined %}
+        {% if sample.email.list_uuid is defined and sample.email.list_host_id is defined %}
             <dt class="col-sm-3">List UUID@Host ID</dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}@<a
                     href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
+            </dd>
+        {% elseif sample.email.list_uuid is defined %}
+            <dt class="col-sm-3">List UUID</dt>
+            <dd class="col-sm-9 text-truncate">
+                <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}
+            </dd>
+        {% elseif sample.email.list_host_id is defined %}
+            <dt class="col-sm-3">Host ID</dt>
+            <dd class="col-sm-9 text-truncate">
+                <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
             </dd>
         {% endif %}
         {% if sample.email.content_uuid is defined or sample.email.content_host_id is defined %}
