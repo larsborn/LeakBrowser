@@ -21,15 +21,16 @@ class EmailController extends AbstractController
         $this->magicRepository = $magicRepository;
     }
 
-    #[Route('/stats')]
-    public function stats(Request $request): Response
+    #[Route('/list')]
+    public function list(Request $request): Response
     {
         $itemsPerPage = 10;
         $page = (int)$request->query->get('page', 0);
         $totalCount = $this->sampleRepository->countByMagics($this->magicRepository->emails());
 
         return $this->render(
-            'Email/stats.html.twig', [
+            'Email\list.html.twig',
+            [
                 'samples' => $this->sampleRepository->findByMagics(
                     $this->magicRepository->emails(),
                     $itemsPerPage,

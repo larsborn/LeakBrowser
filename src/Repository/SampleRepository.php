@@ -90,7 +90,7 @@ AQL,
     public function findByWildcardString(string $query, int $limit = 10, int $offset = 0): array
     {
         return array_map(
-            fn(Document $row) => $this->constructEntity($row),
+            fn (Document $row) => $this->constructEntity($row),
             $this->aql(
                 <<<AQL
 FOR sample IN samples
@@ -105,13 +105,12 @@ AQL,
     }
 
     /**
-     * @param string[] $array
      * @return string[]
      */
     public function findByMagics(array $magics, int $limit = 10, int $offset = 0): array
     {
         return array_map(
-            fn(Document $row) => $this->constructEntity($row),
+            fn (Document $row) => $this->constructEntity($row),
             $this->aql(
                 <<<AQL
 FOR sample IN samples
@@ -125,9 +124,7 @@ AQL,
         );
     }
 
-    /**
-     * @param string[] $array
-     */
+    
     public function countByMagics(array $magics): int
     {
         return $this->aql(

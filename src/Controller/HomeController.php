@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DTO\SourceWithCount;
 use App\Repository\MagicRepository;
 use App\Repository\SampleRepository;
 use App\Repository\SourceRepository;
