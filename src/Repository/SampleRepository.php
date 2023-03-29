@@ -50,6 +50,9 @@ AQL,
         return $ret[0];
     }
 
+    /**
+     * @return Sample[]
+     */
     public function findBySource(Source $source): array
     {
         $ret = [];
@@ -65,5 +68,38 @@ AQL,
         }
 
         return $ret;
+    }
+
+    public function countByWildcardString(string $query): int
+    {
+        return $this->aql(
+            <<<AQL
+FOR sample IN samples
+    FILTER CONTAINS(sample.email.body, @query)
+    COLLECT WITH COUNT INTO cnt
+    RETURN cnt
+AQL,
+            ['query' => $query]
+        )[0];
+    }
+
+    /**
+     * @return Sample[]
+     */
+    public function findByWildcardString(string $query, int $limit = 10, int $offset = 0): array
+    {
+        return array_map(
+            fn(Document $row) => $this->constructEntity($row),
+            $this->aql(
+                <<<AQL
+FOR sample IN samples
+    FILTER CONTAINS(sample.email.body, @query)
+    SORT sample.sha256
+    LIMIT @offset, @limit
+    RETURN sample
+AQL,
+                ['query' => $query, 'limit' => $limit, 'offset' => $offset]
+            )
+        );
     }
 }

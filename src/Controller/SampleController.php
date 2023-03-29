@@ -40,12 +40,13 @@ class SampleController extends AbstractController
     #[Route('/{sha256}/children')]
     public function children(Request $request, string $sha256): Response
     {
-        $itemsPerPage = 10;
-        $page = (int)$request->query->get('page', 0);
         $sample = $this->sampleRepository->get($sha256);
         if ($sample === null) {
             throw new NotFoundHttpException();
         }
+
+        $itemsPerPage = 10;
+        $page = (int)$request->query->get('page', 0);
         $totalCount = $this->subfileRepository->countChildren($sample);
 
         return $this->render('Sample/children.html.twig', [
