@@ -152,4 +152,22 @@
             <div class="card-body">{{ sample.email.body|nl2br }}</div>
         </div>
     {% endif %}
+    {% if children|length > 0 %}
+        <br/>
+        <div class="card">
+            <div class="card-header">Attachments</div>
+            <div class="card-body">
+                {% for attachment in attachments %}
+                    {% for path in attachment.paths %}
+                        <a href="{{ path('app_sample_metadata', {'sha256': attachment.child.sha256}) }}"><i
+                                class="fa-solid fa-eye"></i></a>
+                        {{ path.fileName }} ({{ attachment.child.size|fileSize }})
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% if children|length < childrenCount %}
+            ...
+        {% endif %}
+    {% endif %}
 {% endblock %}

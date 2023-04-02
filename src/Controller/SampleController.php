@@ -93,6 +93,7 @@ class SampleController extends AbstractController
             'sample' => $sample,
             'childrenCount' => $this->subfileRepository->countChildren($sample),
             'parentsCount' => $this->subfileRepository->countParents($sample),
+            'attachments' => $this->subfileRepository->findChildren($sample, 50),
         ]);
     }
 }
