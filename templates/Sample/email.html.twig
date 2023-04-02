@@ -161,7 +161,8 @@
                     {% for path in attachment.paths %}
                         <a href="{{ path('app_sample_metadata', {'sha256': attachment.child.sha256}) }}"><i
                                 class="fa-solid fa-eye"></i></a>
-                        {{ path.fileName }} ({{ attachment.child.size|fileSize }})
+                        {{ path.fileName }} {% if attachment.child.size %}({{ attachment.child.size|fileSize }}){% endif %}
+                        <br/>
                     {% endfor %}
                 {% endfor %}
             </div>
