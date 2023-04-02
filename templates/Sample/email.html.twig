@@ -152,7 +152,7 @@
             <div class="card-body">{{ sample.email.body|nl2br }}</div>
         </div>
     {% endif %}
-    {% if children|length > 0 %}
+    {% if attachments|length > 0 %}
         <br/>
         <div class="card">
             <div class="card-header">Attachments</div>
@@ -166,7 +166,7 @@
                 {% endfor %}
             </div>
         </div>
-        {% if children|length < childrenCount %}
+        {% if attachments|length < childrenCount %}
             ...
         {% endif %}
     {% endif %}
