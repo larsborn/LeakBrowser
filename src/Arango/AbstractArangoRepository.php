@@ -105,9 +105,6 @@ abstract class AbstractArangoRepository
 
     public function countAll(): int
     {
-        return $this->aql(
-            sprintf('FOR row IN %s COLLECT WITH COUNT INTO cnt RETURN cnt', $this->getCollectionName()),
-            []
-        )[0];
+        return $this->aql(sprintf('RETURN LENGTH(%s)', $this->getCollectionName()), [])[0];
     }
 }
