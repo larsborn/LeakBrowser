@@ -24,6 +24,16 @@
                     <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.fileMagic }}
                     </dd>
                 {% endif %}
+                {% if sample.mimeType %}
+                    <dt class="col-sm-3">MIME</dt>
+                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.mimeType }}
+                    </dd>
+                {% endif %}
+                {% if sample.fileExtension %}
+                    <dt class="col-sm-3">Extension</dt>
+                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.fileExtension }}
+                    </dd>
+                {% endif %}
                 {% if sample.fileNames %}
                     <dt class="col-sm-3">Names</dt>
                     <dd class="col-sm-9">

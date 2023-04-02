@@ -13,6 +13,8 @@ class Sample
     private ?string $sha256;
     private ?int $size;
     private ?string $fileMagic;
+    private ?string $mimeType;
+    private ?string $fileExtension;
     private ?array $email;
 
     /**
@@ -28,6 +30,8 @@ class Sample
         ?string $sha256,
         ?int $size,
         ?string $fileMagic,
+        ?string $mimeType,
+        ?string $fileExtension,
         ?array $fileNames,
         ?array $email,
     ) {
@@ -38,6 +42,8 @@ class Sample
         $this->sha256 = $sha256;
         $this->size = $size;
         $this->fileMagic = $fileMagic;
+        $this->mimeType = $mimeType;
+        $this->fileExtension = $fileExtension;
         $this->fileNames = $fileNames === null ? [] : $fileNames;
         $this->email = $email;
     }
@@ -75,6 +81,16 @@ class Sample
     public function getFileMagic(): ?string
     {
         return $this->fileMagic;
+    }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mimeType;
+    }
+
+    public function getFileExtension(): ?string
+    {
+        return $this->fileExtension;
     }
 
     /**
