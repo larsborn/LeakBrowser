@@ -30,3 +30,8 @@ services:
             $databaseName: '%env(ARANGO_DATABASE)%'
             $username: '%env(ARANGO_USERNAME)%'
             $password: '%env(ARANGO_PASSWORD)%'
+
+    App\Service\CurrentVersionService:
+        arguments:
+            $gitCommit: '%env(GIT_COMMIT)%'
+            $deploymentDate: '%env(DEPLOYMENT_DATE)%'
