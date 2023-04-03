@@ -4,7 +4,10 @@
 {% block title %}Search Result for "{{ query }}"{% endblock %}
 
 {% block body %}
-    <p>Wildcard Search String: "{{ query }}"</p>
+    <p>Query: {{ query }}</p>
+    {% if total is defined %}
+        <p>Total: {{ total }}</p>
+    {% endif %}
 
     {% if samples|length == 0 %}
         <i>No results found</i>

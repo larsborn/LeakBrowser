@@ -5,6 +5,11 @@ namespace App\Controller;
 use App\DTO\GlobalSearch as GlobalSearchDTO;
 use App\Form\GlobalSearchType;
 use App\Repository\SampleRepository;
+use App\Search\Configuration;
+use App\Search\Field;
+use App\Search\FieldType\IntegerType;
+use App\Search\FieldType\StringType;
+use App\Search\SearchHandler;
 use App\Service\SearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,12 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/search')]
 class SearchController extends AbstractController
 {
-    private SearchService $searchService;
+    private SearchHandler $searchHandler;
     private SampleRepository $sampleRepository;
 
-    public function __construct(SearchService $searchService, SampleRepository $sampleRepository)
+    public function __construct(SearchHandler $searchHandler, SampleRepository $sampleRepository)
     {
-        $this->searchService = $searchService;
+        $this->searchHandler = $searchHandler;
         $this->sampleRepository = $sampleRepository;
     }
 
@@ -32,7 +37,7 @@ class SearchController extends AbstractController
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($this->searchService->isSha256($dto->term)) {
+            if ($this->searchHandler->isSha256($dto->term)) {
                 $sample = $this->sampleRepository->get($dto->term);
                 if ($sample !== null) {
                     return $this->redirect(
@@ -57,10 +62,35 @@ class SearchController extends AbstractController
         $totalCount = $this->sampleRepository->countByWildcardString($query);
 
         return $this->render('Search/results.html.twig', [
-            'query' => $query,
+            'query' => sprintf('"%s"', $query),
             'samples' => $this->sampleRepository->findByWildcardString($query, $itemsPerPage, $page * $itemsPerPage),
             'currentPage' => $page,
             'pageCount' => ceil($totalCount / $itemsPerPage),
+        ]);
+    }
+
+    #[Route('/filter')]
+    public function filter(Request $request): Response
+    {
+        $configuration = new Configuration([
+            new Field('size', new IntegerType()),
+            new Field('mime_type', new StringType()),
+            new Field('file_extension', new StringType()),
+            new Field('file_magic', new StringType()),
+            new Field('crc32', new IntegerType()),
+        ]);
+        $searchResponse = $this->searchHandler->handle($configuration, $request);
+        $query = [];
+        foreach ($searchResponse->getParams() as $key => $value) {
+            $query[] = sprintf('%s: "%s"', $key, $value);
+        }
+
+        return $this->render('Search/results.html.twig', [
+            'total' => $searchResponse->getTotal(),
+            'query' => implode(', ', $query),
+            'samples' => $searchResponse->getData(),
+            'currentPage' => $searchResponse->getPage(),
+            'pageCount' => $searchResponse->getPageCount(),
         ]);
     }
 }

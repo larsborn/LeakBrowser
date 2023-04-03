@@ -13,25 +13,35 @@
                 <dt class="col-sm-3">SHA1</dt>
                 <dd class="col-sm-9">{{ sample.sha1 }}</dd>
                 <dt class="col-sm-3">CRC32</dt>
-                <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.crc32 }}</dd>
+                <dd class="col-sm-9">
+                    <a href="{{ path('app_search_filter', {'crc32': sample.crc32}) }}"><i
+                            class="fa-brands fa-searchengin"></i></a>{{ sample.crc32 }}
+                </dd>
                 {% if sample.size %}
                     <dt class="col-sm-3">Size</dt>
-                    <dd class="col-sm-9"><a href="#"><i
+                    <dd class="col-sm-9">
+                        <a href="{{ path('app_search_filter', {'size': sample.size}) }}"><i
                                 class="fa-brands fa-searchengin"></i></a>{{ sample.size|fileSize }}</dd>
                 {% endif %}
                 {% if sample.fileMagic %}
                     <dt class="col-sm-3">Magic</dt>
-                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.fileMagic }}
+                    <dd class="col-sm-9">
+                        <a href="{{ path('app_search_filter', {'file_magic': sample.fileMagic}) }}"><i
+                                class="fa-brands fa-searchengin"></i></a>{{ sample.fileMagic }}
                     </dd>
                 {% endif %}
                 {% if sample.mimeType %}
                     <dt class="col-sm-3">MIME</dt>
-                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.mimeType }}
+                    <dd class="col-sm-9">
+                        <a href="{{ path('app_search_filter', {'mime_type': sample.mimeType}) }}"><i
+                                class="fa-brands fa-searchengin"></i></a>{{ sample.mimeType }}
                     </dd>
                 {% endif %}
                 {% if sample.fileExtension %}
                     <dt class="col-sm-3">Extension</dt>
-                    <dd class="col-sm-9"><a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.fileExtension }}
+                    <dd class="col-sm-9">
+                        <a href="{{ path('app_search_filter', {'file_extension': sample.fileExtension}) }}"><i
+                                class="fa-brands fa-searchengin"></i></a>{{ sample.fileExtension }}
                     </dd>
                 {% endif %}
                 {% if sample.fileNames %}
