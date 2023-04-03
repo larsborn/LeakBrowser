@@ -25,7 +25,7 @@ class SearchHandler
     public function handle(Configuration $configuration, Request $request): SearchResponse
     {
         $limit = 10;
-        $page = (int)$request->query->get('page');
+        $page = (int)$request->query->get('page', '0');
         $lines = [];
         $params = [];
         foreach ($configuration->getFields() as $field) {
@@ -39,9 +39,12 @@ class SearchHandler
             if (! $filterValue) {
                 continue;
             }
-            if ($field->getType() instanceof StringType || $field->getType() instanceof IntegerType) {
+            if ($field->getType() instanceof StringType) {
                 $lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getFieldName());
                 $params[$field->getFieldName()] = $filterValue;
+            } elseif ($field->getType() instanceof IntegerType) {
+                $lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getFieldName());
+                $params[$field->getFieldName()] = (int)$filterValue;
             } else {
                 throw new RuntimeException(sprintf('Unhandled field type: "%s"', $field->getType()::class));
             }
