@@ -10,7 +10,6 @@ use App\Search\Field;
 use App\Search\FieldType\IntegerType;
 use App\Search\FieldType\StringType;
 use App\Search\SearchHandler;
-use App\Service\SearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

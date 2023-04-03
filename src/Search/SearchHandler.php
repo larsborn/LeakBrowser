@@ -5,8 +5,8 @@ namespace App\Search;
 use App\Repository\SampleRepository;
 use App\Search\FieldType\IntegerType;
 use App\Search\FieldType\StringType;
-use Symfony\Component\HttpFoundation\Request;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Request;
 
 class SearchHandler
 {

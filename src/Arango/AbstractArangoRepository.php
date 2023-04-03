@@ -46,7 +46,7 @@ abstract class AbstractArangoRepository
     public function getAll(array $ids): array
     {
         return array_map(
-            fn(Document $row) => $this->constructEntity($row),
+            fn (Document $row) => $this->constructEntity($row),
             $this->aql(
                 sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
                 ['ids' => $ids]
@@ -85,7 +85,7 @@ abstract class AbstractArangoRepository
                 "query" => $query,
 //                "count" => true,
                 "batchSize" => 100,
-//                "sanitize" => true,
+                "sanitize" => true,
                 "bindVars" => $bindVars,
             ]
         );
@@ -111,7 +111,7 @@ abstract class AbstractArangoRepository
     public function findBy(string $aql, array $params): array
     {
         return array_map(
-            fn(Document $doc) => $this->constructEntity($doc),
+            fn (Document $doc) => $this->constructEntity($doc),
             $this->aql($aql, $params)
         );
     }
