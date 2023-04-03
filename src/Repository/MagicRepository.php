@@ -5,7 +5,7 @@ namespace App\Repository;
 class MagicRepository
 {
     /**
-     * @return string[]
+     * @return array<array-key, string>
      */
     public function emails(): array
     {

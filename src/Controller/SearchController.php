@@ -54,15 +54,19 @@ class SearchController extends AbstractController
     #[Route('/results')]
     public function results(Request $request): Response
     {
-        $query = $request->query->get('query');
-
         $itemsPerPage = 10;
+        $query = $request->query->get('query');
         $page = (int)$request->query->get('page', '0');
-        $totalCount = $this->sampleRepository->countByWildcardString($query);
+        $totalCount = $query ? $this->sampleRepository->countByWildcardString($query) : 0;
+        $samples = $query ? $this->sampleRepository->findByWildcardString(
+            $query,
+            $itemsPerPage,
+            $page * $itemsPerPage
+        ) : [];
 
         return $this->render('Search/results.html.twig', [
-            'query' => sprintf('"%s"', $query),
-            'samples' => $this->sampleRepository->findByWildcardString($query, $itemsPerPage, $page * $itemsPerPage),
+            'query' => $query ? sprintf('"%s"', $query) : '-',
+            'samples' => $samples,
             'currentPage' => $page,
             'pageCount' => ceil($totalCount / $itemsPerPage),
         ]);

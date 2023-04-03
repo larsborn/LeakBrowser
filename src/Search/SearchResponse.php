@@ -5,7 +5,7 @@ namespace App\Search;
 class SearchResponse
 {
     private int $page;
-    private ?int $limit;
+    private int $limit;
     private int $total;
     private Configuration $configuration;
     private array $data;
@@ -13,7 +13,7 @@ class SearchResponse
 
     public function __construct(
         int $page,
-        ?int $limit,
+        int $limit,
         int $total,
         Configuration $configuration,
         array $data,
@@ -32,7 +32,7 @@ class SearchResponse
         return $this->page;
     }
 
-    public function getLimit(): ?int
+    public function getLimit(): int
     {
         return $this->limit;
     }

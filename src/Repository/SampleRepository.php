@@ -107,7 +107,7 @@ AQL,
     }
 
     /**
-     * @return string[]
+     * @return Sample[]
      */
     public function findByMagics(array $magics, int $limit = 10, int $offset = 0): array
     {
