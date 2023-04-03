@@ -46,7 +46,7 @@ class SourceController extends AbstractController
         }
 
         $itemsPerPage = 10;
-        $page = (int)$request->query->get('page', 0);
+        $page = (int)$request->query->get('page', '0');
         $totalCount = $this->sampleRepository->countBySource($source);
 
         return $this->render('Source/show.html.twig', [

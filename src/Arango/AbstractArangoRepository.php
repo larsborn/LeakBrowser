@@ -83,7 +83,7 @@ abstract class AbstractArangoRepository
             $this->arangoDatabase->getConnection(),
             [
                 "query" => $query,
-//                "count" => true,
+                "count" => true,
                 "batchSize" => 100,
                 "sanitize" => true,
                 "bindVars" => $bindVars,

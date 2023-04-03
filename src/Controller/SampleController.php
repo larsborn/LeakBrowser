@@ -46,7 +46,7 @@ class SampleController extends AbstractController
         }
 
         $itemsPerPage = 10;
-        $page = (int)$request->query->get('page', 0);
+        $page = (int)$request->query->get('page', '0');
         $totalCount = $this->subfileRepository->countChildren($sample);
 
         return $this->render('Sample/children.html.twig', [
@@ -68,7 +68,7 @@ class SampleController extends AbstractController
         }
 
         $itemsPerPage = 10;
-        $page = (int)$request->query->get('page', 0);
+        $page = (int)$request->query->get('page', '0');
         $totalCount = $this->subfileRepository->countParents($sample);
 
         return $this->render('Sample/parents.html.twig', [

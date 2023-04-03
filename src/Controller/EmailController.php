@@ -25,7 +25,7 @@ class EmailController extends AbstractController
     public function list(Request $request): Response
     {
         $itemsPerPage = 10;
-        $page = (int)$request->query->get('page', 0);
+        $page = (int)$request->query->get('page', '0');
         $totalCount = $this->sampleRepository->countByMagics($this->magicRepository->emails());
 
         return $this->render(
