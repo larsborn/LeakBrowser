@@ -8,6 +8,7 @@ use App\Repository\SampleRepository;
 use App\Search\Configuration;
 use App\Search\Field;
 use App\Search\FieldType\IntegerType;
+use App\Search\FieldType\StringArrayType;
 use App\Search\FieldType\StringType;
 use App\Search\SearchHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -80,8 +81,8 @@ class SearchController extends AbstractController
             new Field('mime_type', new StringType()),
             new Field('file_extension', new StringType()),
             new Field('crc32', new IntegerType()),
-            new Field('email.from_names', new StringType()),
-            new Field('email.from', new StringType()),
+            new Field('email.from_names', new StringArrayType()),
+            new Field('email.from', new StringArrayType()),
             new Field('email.thread_index', new StringType()),
         ]);
         $searchResponse = $this->searchHandler->handle($configuration, $request);
