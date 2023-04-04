@@ -24,4 +24,9 @@ class Field
     {
         return $this->type;
     }
+
+    public function getGetParameter(): string
+    {
+        return str_replace('.', '_', $this->fieldName);
+    }
 }

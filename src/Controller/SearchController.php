@@ -79,18 +79,16 @@ class SearchController extends AbstractController
             new Field('size', new IntegerType()),
             new Field('mime_type', new StringType()),
             new Field('file_extension', new StringType()),
-            new Field('file_magic', new StringType()),
             new Field('crc32', new IntegerType()),
+            new Field('email.from_names', new StringType()),
+            new Field('email.from', new StringType()),
+            new Field('email.thread_index', new StringType()),
         ]);
         $searchResponse = $this->searchHandler->handle($configuration, $request);
-        $query = [];
-        foreach ($searchResponse->getParams() as $key => $value) {
-            $query[] = sprintf('%s: "%s"', $key, $value);
-        }
 
         return $this->render('Search/results.html.twig', [
             'total' => $searchResponse->getTotal(),
-            'query' => implode(', ', $query),
+            'query' => $searchResponse->getHumanReadableQuery(),
             'samples' => $searchResponse->getData(),
             'currentPage' => $searchResponse->getPage(),
             'pageCount' => $searchResponse->getPageCount(),

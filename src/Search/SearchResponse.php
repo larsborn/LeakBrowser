@@ -9,7 +9,7 @@ class SearchResponse
     private int $total;
     private Configuration $configuration;
     private array $data;
-    private array $params;
+    private string $humanReadableQuery;
 
     public function __construct(
         int $page,
@@ -17,14 +17,14 @@ class SearchResponse
         int $total,
         Configuration $configuration,
         array $data,
-        array $params
+        string $humanReadableQuery
     ) {
         $this->page = $page;
         $this->limit = $limit;
         $this->total = $total;
         $this->configuration = $configuration;
         $this->data = $data;
-        $this->params = $params;
+        $this->humanReadableQuery = $humanReadableQuery;
     }
 
     public function getPage(): int
@@ -57,11 +57,8 @@ class SearchResponse
         return (int)ceil($this->total / $this->limit);
     }
 
-    /**
-     * @return array<array-key, string>
-     */
-    public function getParams(): array
+    public function getHumanReadableQuery(): string
     {
-        return $this->params;
+        return $this->humanReadableQuery;
     }
 }

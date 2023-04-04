@@ -25,10 +25,7 @@
                 {% endif %}
                 {% if sample.fileMagic %}
                     <dt class="col-sm-3">Magic</dt>
-                    <dd class="col-sm-9">
-                        <a href="{{ path('app_search_filter', {'file_magic': sample.fileMagic}) }}"><i
-                                class="fa-brands fa-searchengin"></i></a>{{ sample.fileMagic }}
-                    </dd>
+                    <dd class="col-sm-9">{{ sample.fileMagic }}</dd>
                 {% endif %}
                 {% if sample.mimeType %}
                     <dt class="col-sm-3">MIME</dt>

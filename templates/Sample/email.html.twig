@@ -88,7 +88,8 @@
         {% if sample.email.thread_index is defined %}
             <dt class="col-sm-3">Thread Index</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
+                <a href="{{ path('app_search_filter', {email_thread_index: sample.email.thread_index}) }}"><i
+                        class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
             </dd>
         {% endif %}
         {% if sample.email.message_uuid is defined or sample.email.message_host_id is defined %}
