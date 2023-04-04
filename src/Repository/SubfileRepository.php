@@ -73,12 +73,9 @@ class SubfileRepository extends AbstractArangoRepository
      */
     public function findChildren(Sample $sample, int $limit = 10, int $offset = 0): array
     {
-        return array_map(
-            fn (Document $row) => $this->constructEntity($row),
-            $this->aql(
-                'FOR edge in subfile FILTER edge._from == @source SORT edge._to LIMIT @offset, @limit RETURN edge',
-                ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
-            )
+        return $this->aql(
+            'FOR edge in subfile FILTER edge._from == @source SORT edge._to LIMIT @offset, @limit RETURN edge',
+            ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
         );
     }
 
@@ -87,28 +84,25 @@ class SubfileRepository extends AbstractArangoRepository
      */
     public function findParents(Sample $sample, int $limit = 10, int $offset = 0): array
     {
-        return array_map(
-            fn (Document $row) => $this->constructEntity($row),
-            $this->aql(
-                'FOR edge in subfile FILTER edge._to == @source LIMIT @offset, @limit RETURN edge',
-                ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
-            )
+        return $this->aql(
+            'FOR edge in subfile FILTER edge._to == @source LIMIT @offset, @limit RETURN edge',
+            ['source' => $sample->getId(), 'limit' => $limit, 'offset' => $offset]
         );
     }
 
     public function countChildren(Sample $sample): int
     {
-        return $this->aql(
+        return $this->rawAql(
             'FOR edge in subfile FILTER edge._from == @source COLLECT WITH COUNT INTO length RETURN length',
-            ['source' => $sample->getId()]
+            ['source' => $sample->getId()],
         )[0];
     }
 
     public function countParents(Sample $sample): int
     {
-        return $this->aql(
+        return $this->rawAql(
             'FOR edge in subfile FILTER edge._to == @source COLLECT WITH COUNT INTO length RETURN length',
-            ['source' => $sample->getId()]
+            ['source' => $sample->getId()],
         )[0];
     }
 }

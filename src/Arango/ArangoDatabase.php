@@ -11,11 +11,17 @@ class ArangoDatabase
 {
     private Connection $connection;
 
-    public function __construct(string $hostname, int $port, string $databaseName, string $username, string $password)
-    {
+    public function __construct(
+        string $hostname,
+        int $port,
+        string $databaseName,
+        string $username,
+        string $password,
+        string $protocol = 'tcp',
+    ) {
         $connectionOptions = [
             ConnectionOptions::OPTION_DATABASE => $databaseName,
-            ConnectionOptions::OPTION_ENDPOINT => sprintf('tcp://%s:%s', $hostname, $port),
+            ConnectionOptions::OPTION_ENDPOINT => sprintf('%s://%s:%s', $protocol, $hostname, $port),
             ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
             ConnectionOptions::OPTION_AUTH_USER => $username,
             ConnectionOptions::OPTION_AUTH_PASSWD => $password,

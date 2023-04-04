@@ -9,7 +9,6 @@ use ArangoDBClient\Collection;
 use ArangoDBClient\CollectionHandler;
 use ArangoDBClient\Document;
 use ArangoDBClient\DocumentHandler;
-use ArangoDBClient\Exception;
 use ArangoDBClient\Statement;
 
 /**
@@ -25,46 +24,9 @@ abstract class AbstractArangoRepository
     public function __construct(ArangoDatabase $arangoDatabase)
     {
         $this->arangoDatabase = $arangoDatabase;
-        $collection = new Collection($this->getCollectionName());
         $this->collectionHandler = new CollectionHandler($arangoDatabase->getConnection());
-        $this->collectionId = $this->collectionHandler->get($collection);
+        $this->collectionId = $this->collectionHandler->get(new Collection($this->getCollectionName()));
         $this->documentHandler = new DocumentHandler($arangoDatabase->getConnection());
-    }
-
-    /**
-     * @return ?T
-     */
-    public function get(string $id): ?object
-    {
-        return $this->constructEntity($this->getDocumentHandler()->get($this->getCollectionName(), $id));
-    }
-
-    /**
-     * @param string[] $ids
-     * @return T[]
-     */
-    public function getAll(array $ids): array
-    {
-        return array_map(
-            fn (Document $row) => $this->constructEntity($row),
-            $this->aql(
-                sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
-                ['ids' => $ids]
-            )
-        );
-    }
-
-    /**
-     * @return list<T>
-     */
-    public function findAll(): array
-    {
-        $ret = [];
-        foreach ($this->collectionHandler->all($this->collectionId) as $document) {
-            $ret[] = $this->constructEntity(InputHelper::type($document, Document::class));
-        }
-
-        return $ret;
     }
 
     abstract protected function getCollectionName(): string;
@@ -75,9 +37,45 @@ abstract class AbstractArangoRepository
     abstract protected function constructEntity(Document $document): object;
 
     /**
-     * @throws Exception
+     * @return ?T
      */
+    public function get(string $id): ?object
+    {
+        return $this->constructEntity($this->documentHandler->get($this->getCollectionName(), $id));
+    }
+
+    /**
+     * @param string[] $ids
+     * @return T[]
+     */
+    public function findByIds(array $ids): array
+    {
+        return $this->aql(
+            sprintf('FOR row in %s FILTER row._id IN @ids RETURN row', $this->getCollectionName()),
+            ['ids' => $ids]
+        );
+    }
+
+    /**
+     * @return T[]
+     */
+    public function findAll(): array
+    {
+        return array_map(
+            fn (Document $document) => $this->constructEntity(InputHelper::type($document, Document::class)),
+            $this->collectionHandler->all($this->collectionId)->getAll()
+        );
+    }
+
     public function aql(string $query, array $bindVars): array
+    {
+        return array_map(
+            fn (Document $document) => $this->constructEntity($document),
+            $this->rawAql($query, $bindVars)
+        );
+    }
+
+    public function rawAql(string $query, array $bindVars): array
     {
         $statement = new Statement(
             $this->arangoDatabase->getConnection(),
@@ -91,36 +89,23 @@ abstract class AbstractArangoRepository
         );
 
         $ret = [];
-        foreach ($statement->execute() as $key => $value) {
-            $ret[$key] = $value;
+        foreach ($statement->execute() as $_id => $document) {
+            $ret[] = $document;
         }
 
         return $ret;
     }
 
-    protected function getDocumentHandler(): DocumentHandler
-    {
-        return $this->documentHandler;
-    }
-
     public function countAll(): int
     {
-        return $this->aql(sprintf('RETURN LENGTH(%s)', $this->getCollectionName()), [])[0];
-    }
-
-    public function findBy(string $aql, array $params): array
-    {
-        return array_map(
-            fn (Document $doc) => $this->constructEntity($doc),
-            $this->aql($aql, $params)
-        );
+        return $this->rawAql(sprintf('RETURN LENGTH(%s)', $this->getCollectionName()), [])[0];
     }
 
     public function countBy(string $filter, array $params): int
     {
         $collectionName = $this->getCollectionName();
 
-        return $this->aql(
+        return $this->rawAql(
             <<<AQL
 FOR doc in $collectionName
     $filter
@@ -128,7 +113,7 @@ FOR doc in $collectionName
     RETURN cnt
 AQL
             ,
-            $params
+            $params,
         )[0];
     }
 }

@@ -39,14 +39,14 @@ class SampleRepository extends AbstractArangoRepository
 
     public function countBySource(Source $source): int
     {
-        $ret = $this->aql(
+        $ret = $this->rawAql(
             <<<AQL
-FOR edge in sample_from_source
+    FOR edge in sample_from_source
     FILTER edge._to == @source
     COLLECT WITH COUNT INTO cnt
     RETURN cnt
-AQL,
-            ['source' => $source->getId()]
+    AQL,
+            ['source' => $source->getId()],
         );
 
         return $ret[0];
@@ -58,16 +58,19 @@ AQL,
     public function findBySource(Source $source, int $limit = 10, int $offset = 0): array
     {
         $ret = [];
-        foreach ($this->aql(
+        foreach ($this->rawAql(
             <<<AQL
 FOR edge in sample_from_source
     FILTER edge._to == @source
     LIMIT @offset, @limit
     RETURN edge._from
 AQL,
-            ['source' => $source->getId(), 'offset' => $offset, 'limit' => $limit]
+            ['source' => $source->getId(), 'offset' => $offset, 'limit' => $limit],
         ) as $id) {
-            $ret[] = $this->constructEntity($this->getDocumentHandler()->get($this->getCollectionName(), $id));
+            $sample = $this->get($id);
+            if ($sample) {
+                $ret[] = $sample;
+            }
         }
 
         return $ret;
@@ -75,14 +78,14 @@ AQL,
 
     public function countByWildcardString(string $query): int
     {
-        return $this->aql(
+        return $this->rawAql(
             <<<AQL
 FOR sample IN samples
     FILTER CONTAINS(sample.email.body, @query)
     COLLECT WITH COUNT INTO cnt
     RETURN cnt
 AQL,
-            ['query' => $query]
+            ['query' => $query],
         )[0];
     }
 
@@ -91,18 +94,15 @@ AQL,
      */
     public function findByWildcardString(string $query, int $limit = 10, int $offset = 0): array
     {
-        return array_map(
-            fn (Document $row) => $this->constructEntity($row),
-            $this->aql(
-                <<<AQL
+        return $this->aql(
+            <<<AQL
 FOR sample IN samples
     FILTER CONTAINS(sample.email.body, @query)
     SORT sample.sha256
     LIMIT @offset, @limit
     RETURN sample
 AQL,
-                ['query' => $query, 'limit' => $limit, 'offset' => $offset]
-            )
+            ['query' => $query, 'limit' => $limit, 'offset' => $offset],
         );
     }
 
@@ -111,32 +111,28 @@ AQL,
      */
     public function findByMagics(array $magics, int $limit = 10, int $offset = 0): array
     {
-        return array_map(
-            fn (Document $row) => $this->constructEntity($row),
-            $this->aql(
-                <<<AQL
+        return $this->aql(
+            <<<AQL
 FOR sample IN samples
     FILTER sample.file_magic IN @magics
     SORT sample.sha256
     LIMIT @offset, @limit
     RETURN sample
 AQL,
-                ['magics' => $magics, 'limit' => $limit, 'offset' => $offset]
-            )
+            ['magics' => $magics, 'limit' => $limit, 'offset' => $offset]
         );
     }
 
-    
     public function countByMagics(array $magics): int
     {
-        return $this->aql(
+        return $this->rawAql(
             <<<AQL
 FOR sample IN samples
     FILTER sample.file_magic IN @magics
     COLLECT WITH COUNT INTO cnt
     RETURN cnt
 AQL,
-            ['magics' => $magics]
+            ['magics' => $magics],
         )[0];
     }
 }

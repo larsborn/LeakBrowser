@@ -25,6 +25,7 @@ services:
 
     App\Arango\ArangoDatabase:
         arguments:
+            $protocol: '%env(ARANGO_PROTOCOL)%'
             $hostname: '%env(ARANGO_HOSTNAME)%'
             $port: '%env(ARANGO_PORT)%'
             $databaseName: '%env(ARANGO_DATABASE)%'
