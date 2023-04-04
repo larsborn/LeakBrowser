@@ -29,9 +29,7 @@ class SearchHandler
         $lines = [];
         $params = [];
         $humanReadableQuery = [];
-        dump($request->query);
         foreach ($configuration->getFields() as $field) {
-            dump($field);
             if (in_array($field->getFieldName(), ['limit', 'offset'])) {
                 throw new RuntimeException(sprintf('Field with name "%s" not allowed', $field->getFieldName()));
             }
@@ -39,7 +37,6 @@ class SearchHandler
                 throw new RuntimeException(sprintf('Duplicate field: "%s"', $field->getFieldName()));
             }
             $filterValue = $request->query->get($field->getGetParameter());
-            dump($filterValue);
             if (! $filterValue) {
                 continue;
             }
