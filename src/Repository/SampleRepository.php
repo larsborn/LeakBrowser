@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Arango\AbstractArangoRepository;
 use App\Entity\EmailAddress;
+use App\Entity\Hostname;
 use App\Entity\Sample;
 use App\Entity\Source;
 use App\InputHelper;
@@ -158,6 +159,30 @@ AQL,
         return $this->rawAql(
             'FOR edge in email_address_in_sample FILTER edge._from == @emailAddressId COLLECT WITH COUNT INTO cnt RETURN cnt',
             ['emailAddressId' => $emailAddress->getId()]
+        )[0];
+    }
+
+    /**
+     * @return Sample[]
+     */
+    public function findByHostname(Hostname $hostname, int $limit = 10, int $offset = 0): array
+    {
+        return array_map(
+            fn (Document $document) => $this->constructEntity(
+                $this->getDocumentHandler()->get($this->getCollectionName(), $document->get('_to'))
+            ),
+            $this->rawAql(
+                'FOR edge in hostname_in_sample FILTER edge._from == @hostnameId SORT edge._to LIMIT @offset, @limit RETURN edge',
+                ['hostnameId' => $hostname->getId(), 'limit' => $limit, 'offset' => $offset]
+            )
+        );
+    }
+
+    public function countByHostname(Hostname $hostname): int
+    {
+        return $this->rawAql(
+            'FOR edge in hostname_in_sample FILTER edge._from == @hostnameId COLLECT WITH COUNT INTO cnt RETURN cnt',
+            ['hostnameId' => $hostname->getId()]
         )[0];
     }
 }

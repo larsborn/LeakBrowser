@@ -21,4 +21,14 @@ class HostnameRepository extends AbstractArangoRepository
     {
         return new Hostname($document->getId(), InputHelper::string($document->get('value')));
     }
+
+    public function find(string $hostname): ?Hostname
+    {
+        $result = $this->aql(
+            'FOR row in hostnames FILTER row.value == @value LIMIT 1 RETURN row',
+            ['value' => $hostname]
+        );
+
+        return count($result) === 1 ? $result[0] : null;
+    }
 }

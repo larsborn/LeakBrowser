@@ -69,7 +69,6 @@ class EmailController extends AbstractController
                 'count' => $totalCount,
                 'currentPage' => $page,
                 'pageCount' => ceil($totalCount / $itemsPerPage),
-
             ]
         );
     }
