@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% block title %}E-Mail Address{% endblock %}
+
+{% block body %}
+    <h2>{{ emailAddress.value }}</h2>
+    <p>Contained in {{ samples|length }} samples.</p>
+    {% include "Email/_table.html.twig" with {samples: samples} %}
+{% endblock %}

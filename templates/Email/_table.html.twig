@@ -1,0 +1,24 @@
+<table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>SHA256</th>
+        <th>Size</th>
+        <th>Date</th>
+        <th>Subject</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sample in samples %}
+        <tr>
+            <td>
+                <a href="{{ path('app_sample_email', {'sha256': sample.sha256}) }}"><i
+                        class="fa-solid fa-eye"></i></a>
+                {{ sample.sha256 }}
+            </td>
+            <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
+            <td>{{ sample.email.date is defined ? sample.email.date : '-' }}</td>
+            <td>{{ sample.email.subject is defined ? sample.email.subject : '-' }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

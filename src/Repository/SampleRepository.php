@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Arango\AbstractArangoRepository;
+use App\Entity\EmailAddress;
 use App\Entity\Sample;
 use App\Entity\Source;
 use App\InputHelper;
@@ -134,5 +135,21 @@ FOR sample IN samples
 AQL,
             ['magics' => $magics],
         )[0];
+    }
+
+    /**
+     * @return Sample[]
+     */
+    public function findByEmailAddress(EmailAddress $emailAddress, int $limit = 10, int $offset = 0): array
+    {
+        return array_map(
+            fn (Document $document) => $this->constructEntity(
+                $this->getDocumentHandler()->get($this->getCollectionName(), $document->get('_to'))
+            ),
+            $this->rawAql(
+                'FOR edge in email_address_in_sample FILTER edge._from == @emailAddressId SORT edge._to LIMIT @offset, @limit RETURN edge',
+                ['emailAddressId' => $emailAddress->getId(), 'limit' => $limit, 'offset' => $offset]
+            )
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\EmailAddressRepository;
 use App\Repository\MagicRepository;
 use App\Repository\SampleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,16 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/emails')]
+#[Route('/email')]
 class EmailController extends AbstractController
 {
     private SampleRepository $sampleRepository;
     private MagicRepository $magicRepository;
+    private EmailAddressRepository $emailAddressRepository;
 
-    public function __construct(SampleRepository $sampleRepository, MagicRepository $magicRepository)
-    {
+    public function __construct(
+        SampleRepository $sampleRepository,
+        MagicRepository $magicRepository,
+        EmailAddressRepository $emailAddressRepository,
+    ) {
         $this->sampleRepository = $sampleRepository;
         $this->magicRepository = $magicRepository;
+        $this->emailAddressRepository = $emailAddressRepository;
     }
 
     #[Route('/list')]
@@ -40,5 +46,14 @@ class EmailController extends AbstractController
                 'pageCount' => ceil($totalCount / $itemsPerPage),
             ]
         );
+    }
+
+    #[Route('/address/{emailAddress}')]
+    public function showAddress($emailAddress): Response
+    {
+        $emailAddress = $this->emailAddressRepository->find($emailAddress);
+        $samples = $this->sampleRepository->findByEmailAddress($emailAddress);
+
+        return $this->render('email/address.html.twig', ['emailAddress' => $emailAddress, 'samples' => $samples]);
     }
 }

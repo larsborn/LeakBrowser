@@ -29,6 +29,12 @@ abstract class AbstractArangoRepository
         $this->documentHandler = new DocumentHandler($arangoDatabase->getConnection());
     }
 
+    public function getDocumentHandler(): DocumentHandler
+    {
+        return $this->documentHandler;
+    }
+
+
     abstract protected function getCollectionName(): string;
 
     /**
