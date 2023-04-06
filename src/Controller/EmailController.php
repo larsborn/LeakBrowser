@@ -49,11 +49,28 @@ class EmailController extends AbstractController
     }
 
     #[Route('/address/{emailAddress}')]
-    public function showAddress($emailAddress): Response
+    public function showAddress(Request $request, string $emailAddress): Response
     {
         $emailAddress = $this->emailAddressRepository->find($emailAddress);
-        $samples = $this->sampleRepository->findByEmailAddress($emailAddress);
 
-        return $this->render('email/address.html.twig', ['emailAddress' => $emailAddress, 'samples' => $samples]);
+        $itemsPerPage = 10;
+        $page = (int)$request->query->get('page', '0');
+        $totalCount = $this->sampleRepository->countByEmailAddress($emailAddress);
+
+        return $this->render(
+            'email/address.html.twig',
+            [
+                'emailAddress' => $emailAddress,
+                'samples' => $this->sampleRepository->findByEmailAddress(
+                    $emailAddress,
+                    $itemsPerPage,
+                    $page * $itemsPerPage
+                ),
+                'count' => $totalCount,
+                'currentPage' => $page,
+                'pageCount' => ceil($totalCount / $itemsPerPage),
+
+            ]
+        );
     }
 }

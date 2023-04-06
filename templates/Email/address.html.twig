@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
+{% import 'macros.html.twig' as macro %}
 {% block title %}E-Mail Address{% endblock %}
 
 {% block body %}
     <h2>{{ emailAddress.value }}</h2>
-    <p>Contained in {{ samples|length }} samples.</p>
+    <div class="row">
+        <div class="col-6">Contained in {{ count }} samples.</div>
+        <div class="col-6">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
+            </div>
+        </div>
+    </div>
     {% include "Email/_table.html.twig" with {samples: samples} %}
 {% endblock %}

@@ -152,4 +152,12 @@ AQL,
             )
         );
     }
+
+    public function countByEmailAddress(EmailAddress $emailAddress): int
+    {
+        return $this->rawAql(
+            'FOR edge in email_address_in_sample FILTER edge._from == @emailAddressId COLLECT WITH COUNT INTO cnt RETURN cnt',
+            ['emailAddressId' => $emailAddress->getId()]
+        )[0];
+    }
 }
