@@ -4,7 +4,7 @@
         {% if name_lst[loop.index0] is defined %}
             <a href="{{ path('app_search_filter', {email_from_names: name_lst[loop.index0]}) }}"><i
                     class="fa-brands fa-searchengin"></i></a> {{ name_lst[loop.index0] }}
-            <a href="{{ path('app_search_filter', {email_from: email}) }}"><i
+            <a href="{{ path('app_email_showaddress', {emailAddress: email}) }}"><i
                     class="fa-brands fa-searchengin"></i></a>&lt;<a
             href="{{ path('app_search_filter', {email_from: email}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[0] }}@<a

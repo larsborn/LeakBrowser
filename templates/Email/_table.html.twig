@@ -1,9 +1,12 @@
+{% import 'macros.html.twig' as macro %}
 <table class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>SHA256</th>
         <th>Size</th>
         <th>Date</th>
+        <th>Sender</th>
+        <th>Recipient</th>
         <th>Subject</th>
     </tr>
     </thead>
@@ -17,6 +20,8 @@
             </td>
             <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
             <td>{{ sample.email.date is defined ? sample.email.date : '-' }}</td>
+            <td>{{ macro.emailAddressList(sample.email.from, sample.email.from_names is defined ? sample.email.from_names : []) }}</td>
+            <td>{{ macro.emailAddressList(sample.email.to, sample.email.to_names is defined ? sample.email.to_names : []) }}</td>
             <td>{{ sample.email.subject is defined ? sample.email.subject : '-' }}</td>
         </tr>
     {% endfor %}
