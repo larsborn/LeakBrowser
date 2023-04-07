@@ -9,6 +9,7 @@ use App\Search\Configuration;
 use App\Search\Field;
 use App\Search\FieldType\IntegerType;
 use App\Search\FieldType\StringArrayType;
+use App\Search\FieldType\StringFieldInArrayType;
 use App\Search\FieldType\StringType;
 use App\Search\SearchHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -88,6 +89,7 @@ class SearchController extends AbstractController
             new Field('email.list_uuid', new StringType()),
             new Field('email.content_uuid', new StringType()),
             new Field('file_names', new StringArrayType()),
+            new Field('email.references', new StringFieldInArrayType('uuid')),
         ]);
         $searchResponse = $this->searchHandler->handle($configuration, $request);
 

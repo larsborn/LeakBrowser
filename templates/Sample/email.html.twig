@@ -135,7 +135,8 @@
             <dt class="col-sm-3">References</dt>
             <dd class="col-sm-9 text-truncate">
                 {% for reference in sample.email.references %}
-                    <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ reference.uuid }}@<a
+                <a href="{{ path('app_search_filter', {email_references: reference.uuid}) }}"><i
+                        class="fa-brands fa-searchengin"></i></a>{{ reference.uuid }}@<a
                     href="{{ path('app_hostname_hostname', {hostname: reference.host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ reference.host_id }}<br/>
                 {% endfor %}

@@ -5,6 +5,7 @@ namespace App\Search;
 use App\Repository\SampleRepository;
 use App\Search\FieldType\IntegerType;
 use App\Search\FieldType\StringArrayType;
+use App\Search\FieldType\StringFieldInArrayType;
 use App\Search\FieldType\StringType;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,20 +42,30 @@ class SearchHandler
             if (! $filterValue) {
                 continue;
             }
-            if ($field->getType() instanceof StringType) {
+            $fieldType = $field->getType();
+            if ($fieldType instanceof StringType) {
                 $lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getGetParameter());
                 $params[$field->getGetParameter()] = $filterValue;
                 $humanReadableQuery[] = sprintf('%s: "%s"', $field->getFieldName(), $filterValue);
-            } elseif ($field->getType() instanceof StringArrayType) {
+            } elseif ($fieldType instanceof StringArrayType) {
                 $lines[] = sprintf('FILTER @%s IN doc.%s', $field->getGetParameter(), $field->getFieldName());
                 $params[$field->getGetParameter()] = $filterValue;
                 $humanReadableQuery[] = sprintf('%s:  "%s"', $field->getFieldName(), $filterValue);
-            } elseif ($field->getType() instanceof IntegerType) {
+            } elseif ($fieldType instanceof StringFieldInArrayType) {
+                $lines[] = sprintf(
+                    'FILTER @%s IN doc.%s[*].%s',
+                    $field->getGetParameter(),
+                    $field->getFieldName(),
+                    $fieldType->getSubFieldName()
+                );
+                $params[$field->getGetParameter()] = $filterValue;
+                $humanReadableQuery[] = sprintf('%s:  "%s"', $field->getFieldName(), $filterValue);
+            } elseif ($fieldType instanceof IntegerType) {
                 $lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getGetParameter());
                 $params[$field->getGetParameter()] = (int)$filterValue;
                 $humanReadableQuery[] = sprintf('%s: %s', $field->getFieldName(), $filterValue);
             } else {
-                throw new RuntimeException(sprintf('Unhandled field type: "%s"', $field->getType()::class));
+                throw new RuntimeException(sprintf('Unhandled field type: "%s"', $fieldType::class));
             }
         }
         $filter = implode("\n", $lines);
