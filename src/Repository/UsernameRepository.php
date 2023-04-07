@@ -21,4 +21,14 @@ class UsernameRepository extends AbstractArangoRepository
     {
         return new Username($document->getId(), InputHelper::string($document->get('value')));
     }
+
+    public function find(string $username): ?Username
+    {
+        $result = $this->aql(
+            'FOR row in usernames FILTER row.value == @value LIMIT 1 RETURN row',
+            ['value' => $username]
+        );
+
+        return count($result) === 1 ? $result[0] : null;
+    }
 }

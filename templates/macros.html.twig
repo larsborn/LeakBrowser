@@ -6,7 +6,7 @@
                     class="fa-brands fa-searchengin"></i></a> {{ name_lst[loop.index0] }}
             <a href="{{ path('app_email_showaddress', {emailAddress: email}) }}"><i
                     class="fa-brands fa-searchengin"></i></a>&lt;<a
-            href="{{ path('app_search_filter', {email_from: email}) }}"><i
+            href="{{ path('app_username_username', {username: spl[0]}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[0] }}@<a
             href="{{ path('app_hostname_hostname', {hostname: spl[1]}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[1] }}&gt;

@@ -9,6 +9,7 @@ use App\Entity\EmailAddress;
 use App\Entity\Hostname;
 use App\Entity\Sample;
 use App\Entity\Source;
+use App\Entity\Username;
 use App\InputHelper;
 use ArangoDBClient\Document;
 
@@ -183,6 +184,30 @@ AQL,
         return $this->rawAql(
             'FOR edge in hostname_in_sample FILTER edge._from == @hostnameId COLLECT WITH COUNT INTO cnt RETURN cnt',
             ['hostnameId' => $hostname->getId()]
+        )[0];
+    }
+
+    /**
+     * @return Sample[]
+     */
+    public function findByUsername(Username $username, int $limit = 10, int $offset = 0): array
+    {
+        return array_map(
+            fn (Document $document) => $this->constructEntity(
+                $this->getDocumentHandler()->get($this->getCollectionName(), $document->get('_to'))
+            ),
+            $this->rawAql(
+                'FOR edge in username_in_sample FILTER edge._from == @usernameId SORT edge._to LIMIT @offset, @limit RETURN edge',
+                ['usernameId' => $username->getId(), 'limit' => $limit, 'offset' => $offset]
+            )
+        );
+    }
+
+    public function countByUsername(Username $username): int
+    {
+        return $this->rawAql(
+            'FOR edge in username_in_sample FILTER edge._from == @usernameId COLLECT WITH COUNT INTO cnt RETURN cnt',
+            ['usernameId' => $username->getId()]
         )[0];
     }
 }

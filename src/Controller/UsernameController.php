@@ -2,40 +2,40 @@
 
 namespace App\Controller;
 
-use App\Repository\HostnameRepository;
 use App\Repository\SampleRepository;
+use App\Repository\UsernameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/hostname')]
-class HostnameController extends AbstractController
+#[Route('/username')]
+class UsernameController extends AbstractController
 {
-    private HostnameRepository $hostnameRepository;
     private SampleRepository $sampleRepository;
+    private UsernameRepository $usernameRepository;
 
-    public function __construct(HostnameRepository $hostnameRepository, SampleRepository $sampleRepository)
+    public function __construct(SampleRepository $sampleRepository, UsernameRepository $usernameRepository)
     {
-        $this->hostnameRepository = $hostnameRepository;
         $this->sampleRepository = $sampleRepository;
+        $this->usernameRepository = $usernameRepository;
     }
 
-    #[Route('/{hostname}')]
-    public function hostname(Request $request, string $hostname): Response
+    #[Route('/{username}')]
+    public function username(Request $request, string $username): Response
     {
-        $hostnameEntity = $this->hostnameRepository->find($hostname);
+        $usernameEntity = $this->usernameRepository->find($username);
 
         $itemsPerPage = 10;
         $page = (int)$request->query->get('page', '0');
-        $totalCount = $this->sampleRepository->countByHostname($hostnameEntity);
+        $totalCount = $this->sampleRepository->countByUsername($usernameEntity);
 
         return $this->render(
             'Hostname/show.html.twig',
             [
-                'hostname' => $hostnameEntity,
-                'samples' => $this->sampleRepository->findByHostname(
-                    $hostnameEntity,
+                'hostname' => $usernameEntity,
+                'samples' => $this->sampleRepository->findByUsername(
+                    $usernameEntity,
                     $itemsPerPage,
                     $page * $itemsPerPage
                 ),
@@ -44,5 +44,6 @@ class HostnameController extends AbstractController
                 'pageCount' => ceil($totalCount / $itemsPerPage),
             ]
         );
+
     }
 }
