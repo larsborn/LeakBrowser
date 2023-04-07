@@ -84,6 +84,10 @@ class SearchController extends AbstractController
             new Field('email.from_names', new StringArrayType()),
             new Field('email.from', new StringArrayType()),
             new Field('email.thread_index', new StringType()),
+            new Field('email.message_uuid', new StringType()),
+            new Field('email.list_uuid', new StringType()),
+            new Field('email.content_uuid', new StringType()),
+            new Field('file_names', new StringArrayType()),
         ]);
         $searchResponse = $this->searchHandler->handle($configuration, $request);
 

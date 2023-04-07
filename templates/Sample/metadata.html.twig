@@ -45,7 +45,8 @@
                     <dt class="col-sm-3">Names</dt>
                     <dd class="col-sm-9">
                         {% for fileName in sample.fileNames %}
-                            <a href="#"><i class="fa-brands fa-searchengin"></i></a>{{ fileName }}
+                        <a href="{{ path('app_search_filter', {'file_names': fileName}) }}"><i
+                                class="fa-brands fa-searchengin"></i></a>{{ fileName }}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     </dd>

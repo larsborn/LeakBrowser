@@ -60,7 +60,7 @@ class EmailController extends AbstractController
         return $this->render(
             'email/address.html.twig',
             [
-                'emailAddress' => $emailAddress,
+                'emailAddress' => $emailAddressEntity,
                 'samples' => $this->sampleRepository->findByEmailAddress(
                     $emailAddressEntity,
                     $itemsPerPage,
