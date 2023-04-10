@@ -5,31 +5,35 @@
 
 {% block body %}
     <h1>{{ source.name }}</h1>
-
-    <div class="d-flex flex-row-reverse bd-highlight">
-        <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
-    </div>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>SHA256</th>
-            <th>Magic</th>
-            <th>Size</th>
-            <th>Filenames</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for sample in samples %}
+    {% if samples|length == 0 %}
+        <p>Source does not have any samples.</p>
+    {% else %}
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead>
             <tr>
-                <td>
-                    <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i class="fa-solid fa-eye"></i></a>
-                    {{ sample.sha256 }}
-                </td>
-                <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
-                <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
-                <td>{{ sample.fileNames|join(", ") }}</td>
+                <th>SHA256</th>
+                <th>Magic</th>
+                <th>Size</th>
+                <th>Filenames</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for sample in samples %}
+                <tr>
+                    <td>
+                        <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i
+                                class="fa-solid fa-eye"></i></a>
+                        {{ sample.sha256 }}
+                    </td>
+                    <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
+                    <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
+                    <td>{{ sample.fileNames|join(", ") }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
