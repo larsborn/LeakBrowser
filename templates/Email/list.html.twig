@@ -8,5 +8,5 @@
     <div class="d-flex flex-row-reverse bd-highlight">
         <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
     </div>
-    {% include "Email/_table.html.twig", {samples: samples} %}
+    {% include "Email/_table.html.twig" with {samples: samples} %}
 {% endblock %}

@@ -20,8 +20,8 @@
             </td>
             <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
             <td>{{ sample.email.date is defined ? sample.email.date : '-' }}</td>
-            <td>{{ macro.emailAddressList(sample.email.from, sample.email.from_names is defined ? sample.email.from_names : []) }}</td>
-            <td>{{ macro.emailAddressList(sample.email.to, sample.email.to_names is defined ? sample.email.to_names : []) }}</td>
+            <td>{{ macro.emailAddressList(sample.email.from is defined ? sample.email.from : [], sample.email.from_names is defined ? sample.email.from_names : []) }}</td>
+            <td>{{ macro.emailAddressList(sample.email.to is defined ? sample.email.to : [], sample.email.to_names is defined ? sample.email.to_names : []) }}</td>
             <td>{{ sample.email.subject is defined ? sample.email.subject : '-' }}</td>
         </tr>
     {% endfor %}

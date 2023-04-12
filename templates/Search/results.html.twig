@@ -4,7 +4,7 @@
 {% block title %}Search Result for "{{ query }}"{% endblock %}
 
 {% block body %}
-    {% if samples|length == 0 %}
+    {% if samples|length == 0 and email_samples|length == 0 %}
         <i>No results found</i>
     {% else %}
         <div class="row">
@@ -24,29 +24,37 @@
                 </div>
             </div>
         </div>
-        <table class="table table-striped table-bordered">
-            <thead>
-            <tr>
-                <th>SHA256</th>
-                <th>Magic</th>
-                <th>Size</th>
-                <th>Filenames</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sample in samples %}
+        {% if samples|length > 0 %}
+            <table class="table table-striped table-bordered">
+                <thead>
                 <tr>
-                    <td>
-                        <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i
-                                class="fa-solid fa-eye"></i></a>
-                        {{ sample.sha256 }}
-                    </td>
-                    <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
-                    <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
-                    <td>{{ sample.fileNames|join(" ") }}</td>
+                    <th>SHA256</th>
+                    <th>Magic</th>
+                    <th>Size</th>
+                    <th>Filenames</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for sample in samples %}
+                    {% if sample.mail %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i
+                                        class="fa-solid fa-eye"></i></a>
+                                {{ sample.sha256 }}
+                            </td>
+                            <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
+                            <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
+                            <td>{{ sample.fileNames|join(" ") }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if email_samples|length > 0 %}
+            <h2>E-Mails</h2>
+            {% include "Email/_table.html.twig" with {samples: email_samples} %}
+        {% endif %}
     {% endif %}
 {% endblock %}
