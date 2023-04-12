@@ -66,7 +66,7 @@
             <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.mail_reply_to, sample.email.mail_reply_to_names is defined ? sample.email.mail_reply_to_names : []) }}</dd>
         {% endif %}
         {% if sample.email.savedfromemail is defined %}
-            <dt class="col-sm-3">Savedfromemail</dt>
+            <dt class="col-sm-3">SavedFromEmail</dt>
             <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.savedfromemail, sample.email.savedfromemail_names is defined ? sample.email.savedfromemail_names : []) }}</dd>
         {% endif %}
         {% if sample.email.errors_to is defined %}
@@ -152,9 +152,12 @@
                 {% endfor %}
             </dd>
         {% endif %}
-        {% for x_header in sample.email.x_headers %}
-
-        {% endfor %}
+        {% if sample.email.x_headers is defined %}
+            {% for x_header in sample.email.x_headers %}
+                <dt class="col-sm-3">{{ x_header.name }}</dt>
+                <dd class="col-sm-9">{{ x_header.value }}</dd>
+            {% endfor %}
+        {% endif %}
     </dl>
     {% if sample.email.body is defined %}
         <div class="card">

@@ -101,8 +101,12 @@ class Sample
         return $this->fileNames;
     }
 
-    public function isEmail(): bool
+    public function isMail(): bool
     {
+        if ($this->fileExtension === 'eml') {
+            return true;
+        }
+
         if (! $this->fileMagic) {
             return false;
         }
