@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\SampleRepository;
+use App\Repository\SourceRepository;
 use App\Repository\SubfileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +16,16 @@ class SampleController extends AbstractController
 {
     private SampleRepository $sampleRepository;
     private SubfileRepository $subfileRepository;
+    private SourceRepository $sourceRepository;
 
-    public function __construct(SampleRepository $sampleRepository, SubfileRepository $subfileRepository)
-    {
+    public function __construct(
+        SampleRepository $sampleRepository,
+        SubfileRepository $subfileRepository,
+        SourceRepository $sourceRepository,
+    ) {
         $this->sampleRepository = $sampleRepository;
         $this->subfileRepository = $subfileRepository;
+        $this->sourceRepository = $sourceRepository;
     }
 
     #[Route('/{sha256}')]
@@ -32,6 +38,7 @@ class SampleController extends AbstractController
 
         return $this->render('Sample/metadata.html.twig', [
             'sample' => $sample,
+            'sources' => $this->sourceRepository->findBySample($sample),
             'childrenCount' => $this->subfileRepository->countChildren($sample),
             'parentsCount' => $this->subfileRepository->countParents($sample),
         ]);

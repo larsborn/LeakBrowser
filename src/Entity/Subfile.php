@@ -4,9 +4,8 @@ namespace App\Entity;
 
 use App\DTO\Path;
 
-class Subfile
+class Subfile extends ArangoEntity
 {
-    private string $id;
     private Sample $parent;
     private Sample $child;
 
@@ -26,10 +25,6 @@ class Subfile
         $this->paths = $paths === null ? [] : $paths;
     }
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
 
     public function getParent(): Sample
     {

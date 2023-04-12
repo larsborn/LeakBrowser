@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-class Sample
+class Sample extends ArangoEntity
 {
-    private string $id;
     private ?int $crc32;
     private ?string $md5;
     private ?string $sha1;
@@ -46,11 +45,6 @@ class Sample
         $this->fileExtension = $fileExtension;
         $this->fileNames = $fileNames === null ? [] : $fileNames;
         $this->email = $email;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     public function getCrc32(): ?int
