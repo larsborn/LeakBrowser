@@ -73,6 +73,14 @@
             <dt class="col-sm-3">Errors-To</dt>
             <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.errors_to, sample.email.errors_to_names is defined ? sample.email.errors_to_names : []) }}</dd>
         {% endif %}
+        {% if sample.email.delivered_to is defined %}
+            <dt class="col-sm-3">Delivered-To</dt>
+            <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.delivered_to, sample.email.delivered_to_names is defined ? sample.email.delivered_to_names : []) }}</dd>
+        {% endif %}
+        {% if sample.email.resent_from is defined %}
+            <dt class="col-sm-3">Resent-From</dt>
+            <dd class="col-sm-9 text-truncate">{{ macro.emailAddressList(sample.email.resent_from, sample.email.resent_from_names is defined ? sample.email.resent_from_names : []) }}</dd>
+        {% endif %}
         {% if sample.email.subject is defined %}
             <dt class="col-sm-3">Subject</dt>
             <dd class="col-sm-9 text-truncate">{{ sample.email.subject }}</dd>
