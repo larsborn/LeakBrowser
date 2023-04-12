@@ -7,6 +7,7 @@ use App\Repository\SampleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/hostname')]
@@ -25,6 +26,9 @@ class HostnameController extends AbstractController
     public function hostname(Request $request, string $hostname): Response
     {
         $hostnameEntity = $this->hostnameRepository->find($hostname);
+        if ($hostnameEntity === null) {
+            throw new NotFoundHttpException();
+        }
 
         $itemsPerPage = 10;
         $page = (int)$request->query->get('page', '0');

@@ -8,6 +8,7 @@ use App\Repository\SampleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/email')]
@@ -52,6 +53,9 @@ class EmailController extends AbstractController
     public function showAddress(Request $request, string $emailAddress): Response
     {
         $emailAddressEntity = $this->emailAddressRepository->find($emailAddress);
+        if ($emailAddressEntity === null) {
+            throw new NotFoundHttpException();
+        }
 
         $itemsPerPage = 10;
         $page = (int)$request->query->get('page', '0');

@@ -7,6 +7,7 @@ use App\Repository\UsernameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/username')]
@@ -25,6 +26,9 @@ class UsernameController extends AbstractController
     public function username(Request $request, string $username): Response
     {
         $usernameEntity = $this->usernameRepository->find($username);
+        if ($usernameEntity === null) {
+            throw new NotFoundHttpException();
+        }
 
         $itemsPerPage = 10;
         $page = (int)$request->query->get('page', '0');
