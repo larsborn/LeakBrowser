@@ -48,6 +48,5 @@ class UsernameController extends AbstractController
                 'pageCount' => ceil($totalCount / $itemsPerPage),
             ]
         );
-
     }
 }
