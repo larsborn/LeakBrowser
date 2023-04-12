@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\GlobalSearch as GlobalSearchDTO;
+use App\Entity\Sample;
 use App\Form\GlobalSearchType;
 use App\Repository\SampleRepository;
 use App\Search\Configuration;
@@ -68,7 +69,8 @@ class SearchController extends AbstractController
 
         return $this->render('Search/results.html.twig', [
             'query' => $query ? sprintf('"%s"', $query) : '-',
-            'samples' => $samples,
+            'samples' => array_filter($samples, fn (Sample $sample) => ! $sample->isMail()),
+            'email_samples' => array_filter($samples, fn (Sample $sample) => $sample->isMail()),
             'currentPage' => $page,
             'pageCount' => ceil($totalCount / $itemsPerPage),
         ]);
@@ -93,10 +95,13 @@ class SearchController extends AbstractController
         ]);
         $searchResponse = $this->searchHandler->handle($configuration, $request);
 
+        $samples = $searchResponse->getData();
+
         return $this->render('Search/results.html.twig', [
             'total' => $searchResponse->getTotal(),
             'query' => $searchResponse->getHumanReadableQuery(),
-            'samples' => $searchResponse->getData(),
+            'samples' => array_filter($samples, fn (Sample $sample) => ! $sample->isMail()),
+            'email_samples' => array_filter($samples, fn (Sample $sample) => $sample->isMail()),
             'currentPage' => $searchResponse->getPage(),
             'pageCount' => $searchResponse->getPageCount(),
         ]);
