@@ -81,7 +81,7 @@ abstract class AbstractArangoRepository
         );
     }
 
-    public function rawAql(string $query, array $bindVars): array
+    public function rawAql(string $query, array $bindVars = []): array
     {
         $statement = new Statement(
             $this->arangoDatabase->getConnection(),

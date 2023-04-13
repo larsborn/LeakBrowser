@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Arango\AbstractArangoRepository;
+use App\DTO\ExtensionWithCount;
 use App\Entity\EmailAddress;
 use App\Entity\Hostname;
 use App\Entity\Sample;
@@ -210,5 +211,29 @@ AQL,
             'FOR edge in username_in_sample FILTER edge._from == @usernameId COLLECT WITH COUNT INTO cnt RETURN cnt',
             ['usernameId' => $username->getId()]
         )[0];
+    }
+
+    /**
+     * @return ExtensionWithCount[]
+     */
+    public function findExtensions(): array
+    {
+        $ret = [];
+        foreach ($this->rawAql(
+            <<<AQL
+FOR sample in samples
+    FILTER sample.file_extension != null
+    COLLECT extension = sample.file_extension WITH COUNT INTO cnt
+    SORT cnt DESC
+    RETURN {"extension": extension, "count": cnt}
+AQL
+        ) as $row) {
+            $ret[] = new ExtensionWithCount(
+                InputHelper::string($row->get('extension')),
+                InputHelper::int($row->get('count')),
+            );
+        }
+
+        return $ret;
     }
 }

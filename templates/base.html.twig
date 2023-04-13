@@ -58,6 +58,11 @@
                                     Emails
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('app_filetype_list') }}">
+                                    Types
+                                </a>
+                            </li>
                         </ul>
                         {{ render(controller('App\\Controller\\SearchController::form')) }}
                     </div>
