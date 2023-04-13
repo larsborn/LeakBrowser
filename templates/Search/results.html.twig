@@ -36,18 +36,16 @@
                 </thead>
                 <tbody>
                 {% for sample in samples %}
-                    {% if sample.mail %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i
-                                        class="fa-solid fa-eye"></i></a>
-                                {{ sample.sha256 }}
-                            </td>
-                            <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
-                            <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
-                            <td>{{ sample.fileNames|join(" ") }}</td>
-                        </tr>
-                    {% endif %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}"><i
+                                    class="fa-solid fa-eye"></i></a>
+                            {{ sample.sha256 }}
+                        </td>
+                        <td>{{ sample.fileMagic ? sample.fileMagic : '-' }}</td>
+                        <td>{{ sample.size ? sample.size|fileSize : '-' }}</td>
+                        <td>{{ sample.fileNames|join(" ") }}</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
