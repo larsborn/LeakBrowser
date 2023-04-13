@@ -37,6 +37,7 @@ class SampleRepository extends AbstractArangoRepository
             InputHelper::nullableString($document->get('file_extension')),
             InputHelper::nullableArray($document->get('file_names')),
             InputHelper::nullableArray($document->get('email')),
+            InputHelper::nullableString($document->get('thumbnail')),
         );
     }
 

@@ -171,7 +171,12 @@
     </dl>
     {% if sample.email.body is defined %}
         <div class="card">
-            <div class="card-header">E-Mail Body</div>
+            <div class="card-header">
+                E-Mail Body
+                {% if sample.email.body_type is defined %}
+                    ({{ sample.email.body_type }})
+                {% endif %}
+            </div>
             <div class="card-body">{{ sample.email.body|nl2br }}</div>
         </div>
     {% endif %}
@@ -186,6 +191,10 @@
                                 class="fa-solid fa-eye"></i></a>
                         {{ path.fileName }} {% if attachment.child.size %}({{ attachment.child.size|fileSize }}){% endif %}
                         <br/>
+                        {% if attachment.child.thumbnail %}
+                            <img src="{{ path('app_thumbnail_thumbnail', {sha256: attachment.child.sha256}) }}"/>
+                            <br/>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             </div>

@@ -67,6 +67,12 @@
                         {% endfor %}
                     </dd>
                 {% endif %}
+                {% if sample.thumbnail is defined %}
+                    <dt class="col-sm-3">Thumbnail</dt>
+                    <dd class="col-sm-9">
+                        <img src="{{ path('app_thumbnail_thumbnail', {sha256: sample.sha256}) }}"/>
+                    </dd>
+                {% endif %}
             </dl>
         </div>
     </div>

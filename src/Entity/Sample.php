@@ -15,6 +15,7 @@ class Sample extends ArangoEntity
     private ?string $mimeType;
     private ?string $fileExtension;
     private ?array $email;
+    private ?string $thumbnail;
 
     /**
      * @var string[]
@@ -33,6 +34,7 @@ class Sample extends ArangoEntity
         ?string $fileExtension,
         ?array $fileNames,
         ?array $email,
+        ?string $thumbnail,
     ) {
         $this->id = $id;
         $this->crc32 = $crc32;
@@ -45,6 +47,7 @@ class Sample extends ArangoEntity
         $this->fileExtension = $fileExtension;
         $this->fileNames = $fileNames === null ? [] : $fileNames;
         $this->email = $email;
+        $this->thumbnail = $thumbnail;
     }
 
     public function getCrc32(): ?int
@@ -111,5 +114,10 @@ class Sample extends ArangoEntity
     public function getEmail(): ?array
     {
         return $this->email;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
     }
 }
