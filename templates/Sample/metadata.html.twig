@@ -73,6 +73,17 @@
                         <img src="{{ path('app_thumbnail_thumbnail', {sha256: sample.sha256}) }}"/>
                     </dd>
                 {% endif %}
+                {% if sample.image.width is defined and sample.image.height is defined %}
+                    <dt class="col-sm-3">Image Dimensions</dt>
+                    <dd class="col-sm-9">{{ sample.image.width }} x {{ sample.image.height }}</dd>
+                {% endif %}
+                {% if sample.image.exif is defined %}
+                    <dt class="col-12 text-center">Exif Data</dt>
+                    {% for exif in sample.image.exif %}
+                        <dt class="col-sm-3">{{ exif.id|exifIdToKey }}</dt>
+                        <dd class="col-sm-9">{{ exif.value }}</dd>
+                    {% endfor %}
+                {% endif %}
             </dl>
         </div>
     </div>
