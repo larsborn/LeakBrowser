@@ -11,6 +11,9 @@ use App\Enum\ExifType;
 
 class ExifTagRepository
 {
+    /**
+     * @var ExifTag[]
+     */
     private array $data;
 
     public function __construct()
@@ -2058,5 +2061,16 @@ class ExifTagRepository
                 'This tag indicates horizontal positioning errors in meters.'
             ),
         ];
+    }
+
+    public function findById(int $id): ?ExifTag
+    {
+        foreach ($this->data as $exifTag) {
+            if ($exifTag->tag === $id) {
+                return $exifTag;
+            }
+        }
+
+        return null;
     }
 }

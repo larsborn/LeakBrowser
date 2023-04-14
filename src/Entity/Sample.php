@@ -15,6 +15,7 @@ class Sample extends ArangoEntity
     private ?string $mimeType;
     private ?string $fileExtension;
     private ?array $email;
+    private ?array $image;
     private ?string $thumbnail;
 
     /**
@@ -34,6 +35,7 @@ class Sample extends ArangoEntity
         ?string $fileExtension,
         ?array $fileNames,
         ?array $email,
+        ?array $image,
         ?string $thumbnail,
     ) {
         $this->id = $id;
@@ -47,6 +49,7 @@ class Sample extends ArangoEntity
         $this->fileExtension = $fileExtension;
         $this->fileNames = $fileNames === null ? [] : $fileNames;
         $this->email = $email;
+        $this->image = $image;
         $this->thumbnail = $thumbnail;
     }
 
@@ -114,6 +117,11 @@ class Sample extends ArangoEntity
     public function getEmail(): ?array
     {
         return $this->email;
+    }
+
+    public function getImage(): ?array
+    {
+        return $this->image;
     }
 
     public function getThumbnail(): ?string
