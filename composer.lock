@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9c660220330b060c12edc961c174d95",
+    "content-hash": "a2c025dcd3371e452898f55ad3569291",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -158,6 +158,63 @@
                 }
             ],
             "time": "2022-12-15T16:57:16+00:00"
+        },
+        {
+            "name": "patchlevel/enum",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/patchlevel/enum.git",
+                "reference": "a89fd8901ec75bac7e0ae5fca08ddcc5fc3fa07a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/patchlevel/enum/zipball/a89fd8901ec75bac7e0ae5fca08ddcc5fc3fa07a",
+                "reference": "a89fd8901ec75bac7e0ae5fca08ddcc5fc3fa07a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "^7.4|^8.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.20.2",
+                "patchlevel/coding-standard": "^1.0.0",
+                "phpstan/phpstan": "^0.12.58",
+                "phpunit/phpunit": "^9.4.4",
+                "symfony/var-dumper": "^5.2.0",
+                "vimeo/psalm": "^4.3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Patchlevel\\Enum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Badura",
+                    "email": "d.m.badura@gmail.com"
+                },
+                {
+                    "name": "David Badura",
+                    "email": "d.a.badura@gmail.com"
+                }
+            ],
+            "description": "Small lightweight library to create enum in PHP without SPLEnum and strict comparisons allowed",
+            "homepage": "https://github.com/patchlevel/enum",
+            "keywords": [
+                "enum"
+            ],
+            "support": {
+                "issues": "https://github.com/patchlevel/enum/issues",
+                "source": "https://github.com/patchlevel/enum/tree/1.0.0"
+            },
+            "time": "2020-12-05T10:17:10+00:00"
         },
         {
             "name": "psr/cache",
@@ -5438,7 +5495,8 @@
     "platform": {
         "php": ">=8.1",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-zlib": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
