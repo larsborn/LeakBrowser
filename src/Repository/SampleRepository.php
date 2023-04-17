@@ -237,4 +237,35 @@ AQL
 
         return $ret;
     }
+
+    /**
+     * @param string[] $extensions
+     * @return Sample[]
+     */
+    public function findByExtension(array $extensions, int $limit = 10, int $offset = 0): array
+    {
+        return $this->aql(
+            <<<AQL
+FOR sample IN samples
+    FILTER sample.file_extension IN @extensions
+    SORT sample.sha256
+    LIMIT @offset, @limit
+    RETURN sample
+AQL,
+            ['extensions' => $extensions, 'limit' => $limit, 'offset' => $offset]
+        );
+    }
+
+    public function countByExtension(array $extensions): int
+    {
+        return $this->rawAql(
+            <<<AQL
+FOR sample IN samples
+    FILTER sample.file_extension IN @extensions
+    COLLECT WITH COUNT INTO cnt
+    RETURN cnt
+AQL,
+            ['extensions' => $extensions],
+        )[0];
+    }
 }

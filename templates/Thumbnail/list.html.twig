@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+{% import 'macros.html.twig' as macro %}
+
+{% block title %}
+    Images
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-row-reverse bd-highlight">
+        <div class="p-2">{{ macro.pagination(pageCount, currentPage) }}</div>
+    </div>
+    <div class="row g-2">
+        {% for sample in samples %}
+            <div class="col-1 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ path('app_thumbnail_thumbnail', {sha256: sample.sha256}) }}"
+                         alt="Thumbnail of {{ sample.sha256 }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ sample.sha256 }}</h5>
+                        <p class="card-text">
+                            {{ sample.fileNames|join(', ') }}
+                        </p>
+                        <a href="{{ path('app_sample_parents', {sha256: sample.sha256}) }}" class="btn btn-primary"><i
+                                class="fa fa-eye"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

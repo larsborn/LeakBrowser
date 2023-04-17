@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\SampleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,6 +18,28 @@ class ThumbnailController extends AbstractController
     public function __construct(SampleRepository $sampleRepository)
     {
         $this->sampleRepository = $sampleRepository;
+    }
+
+    #[Route('/list')]
+    public function list(Request $request): Response
+    {
+        $itemsPerPage = 12 * 3;
+        $page = (int)$request->query->get('page', '0');
+        $imageFileExtensions = ['jpg', 'png', 'gif', 'bmp'];
+        $totalCount = $this->sampleRepository->countByExtension($imageFileExtensions);
+
+        return $this->render(
+            'Thumbnail/list.html.twig',
+            [
+                'samples' => $this->sampleRepository->findByExtension(
+                    $imageFileExtensions,
+                    $itemsPerPage,
+                    $page * $itemsPerPage
+                ),
+                'currentPage' => $page,
+                'pageCount' => ceil($totalCount / $itemsPerPage),
+            ],
+        );
     }
 
     #[Route('/{sha256}')]
