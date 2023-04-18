@@ -43,7 +43,9 @@ class SearchController extends AbstractController
                 $sample = $this->sampleRepository->get($dto->term);
                 if ($sample !== null) {
                     return $this->redirect(
-                        $this->generateUrl('app_sample_metadata', ['sha256' => $sample->getSha256()])
+                        $sample->isMail() ?
+                            $this->generateUrl('app_sample_email', ['sha256' => $sample->getSha256()]) :
+                            $this->generateUrl('app_sample_metadata', ['sha256' => $sample->getSha256()])
                     );
                 }
             }
