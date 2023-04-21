@@ -6,13 +6,13 @@
     <ul class="nav nav-tabs" id="institutionsTab" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link {% if is_route('app_sample_metadata') %}active{% endif %}"
-               href="{{ path('app_sample_metadata', {sha256: sample.sha256}) }}">
+               href="{{ path('app_sample_metadata', {'sha256': sample.sha256}) }}">
                 <i class="fas fa-file-code"></i> Metadata
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link {% if is_route('app_sample_children') %}active{% endif %}"
-               href="{{ path('app_sample_children', {sha256: sample.sha256}) }}">
+               href="{{ path('app_sample_children', {'sha256': sample.sha256}) }}">
                 <i class="fas fa-arrow-down"></i>
                 Child Files
                 <span class="badge rounded-pill bg-secondary">{{ childrenCount }}</span>
@@ -20,7 +20,7 @@
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link {% if is_route('app_sample_parents') %}active{% endif %}"
-               href="{{ path('app_sample_parents', {sha256: sample.sha256}) }}">
+               href="{{ path('app_sample_parents', {'sha256': sample.sha256}) }}">
                 <i class="fas fa-arrow-up"></i>
                 Parent Files
                 <span class="badge rounded-pill bg-secondary">{{ parentsCount }}</span>
@@ -29,7 +29,7 @@
         {% if sample.email %}
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if is_route('app_sample_email') %}active{% endif %}"
-                   href="{{ path('app_sample_email', {sha256: sample.sha256}) }}">
+                   href="{{ path('app_sample_email', {'sha256': sample.sha256}) }}">
                     <i class="fas fa-envelope"></i>
                     E-Mail
                 </a>

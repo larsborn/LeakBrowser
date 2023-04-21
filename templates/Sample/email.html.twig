@@ -96,46 +96,46 @@
         {% if sample.email.thread_index is defined %}
             <dt class="col-sm-3">Thread Index</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_search_filter', {email_thread_index: sample.email.thread_index}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_thread_index': sample.email.thread_index}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
             </dd>
         {% endif %}
         {% if sample.email.message_uuid is defined or sample.email.message_host_id is defined %}
             <dt class="col-sm-3">Message UUID@Host ID</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_search_filter', {email_message_uuid: sample.email.message_uuid}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_message_uuid': sample.email.message_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_uuid }}@<a
-                    href="{{ path('app_hostname_hostname', {hostname: sample.email.message_host_id}) }}"><i
+                    href="{{ path('app_hostname_hostname', {'hostname': sample.email.message_host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_host_id }}
             </dd>
         {% endif %}
         {% if sample.email.list_uuid is defined and sample.email.list_host_id is defined %}
             <dt class="col-sm-3">List UUID@Host ID</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_search_filter', {email_list_uuid: sample.email.list_uuid}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_list_uuid': sample.email.list_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}@<a
-                    href="{{ path('app_hostname_hostname', {hostname: sample.email.list_host_id}) }}"><i
+                    href="{{ path('app_hostname_hostname', {'hostname': sample.email.list_host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
             </dd>
         {% elseif sample.email.list_uuid is defined %}
             <dt class="col-sm-3">List UUID</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_search_filter', {email_list_uuid: sample.email.list_uuid}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_list_uuid': sample.email.list_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}
             </dd>
         {% elseif sample.email.list_host_id is defined %}
             <dt class="col-sm-3">Host ID</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_hostname_hostname', {hostname: sample.email.list_host_id}) }}"><i
+                <a href="{{ path('app_hostname_hostname', {'hostname': sample.email.list_host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
             </dd>
         {% endif %}
         {% if sample.email.content_uuid is defined or sample.email.content_host_id is defined %}
             <dt class="col-sm-3">Content UUID@Host ID</dt>
             <dd class="col-sm-9 text-truncate">
-                <a href="{{ path('app_search_filter', {email_content_uuid: sample.email.content_uuid}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_content_uuid': sample.email.content_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.content_uuid }}@<a
-                    href="{{ path('app_hostname_hostname', {hostname: sample.email.content_host_id}) }}"><i
+                    href="{{ path('app_hostname_hostname', {'hostname': sample.email.content_host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.content_host_id }}
             </dd>
         {% endif %}
@@ -143,9 +143,9 @@
             <dt class="col-sm-3">References</dt>
             <dd class="col-sm-9 text-truncate">
                 {% for reference in sample.email.references %}
-                <a href="{{ path('app_search_filter', {email_references: reference.uuid}) }}"><i
+                <a href="{{ path('app_search_filter', {'email_references': reference.uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ reference.uuid }}@<a
-                    href="{{ path('app_hostname_hostname', {hostname: reference.host_id}) }}"><i
+                    href="{{ path('app_hostname_hostname', {'hostname': reference.host_id}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ reference.host_id }}<br/>
                 {% endfor %}
             </dd>
@@ -192,7 +192,7 @@
                         {{ path.fileName }} {% if attachment.child.size %}({{ attachment.child.size|fileSize }}){% endif %}
                         <br/>
                         {% if attachment.child.thumbnail %}
-                            <img src="{{ path('app_thumbnail_thumbnail', {sha256: attachment.child.sha256}) }}"/>
+                            <img src="{{ path('app_thumbnail_thumbnail', {'sha256': attachment.child.sha256}) }}"/>
                             <br/>
                         {% endif %}
                     {% endfor %}

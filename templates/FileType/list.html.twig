@@ -15,7 +15,7 @@
         {% for extension in extensions %}
             <tr>
                 <td>
-                    <a href="{{ path('app_search_filter', {file_extension: extension.extension}) }}"><i
+                    <a href="{{ path('app_search_filter', {'file_extension': extension.extension}) }}"><i
                             class="fa-solid fa-search"></i></a>
                     {{ extension.extension }}
                 </td>

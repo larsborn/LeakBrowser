@@ -2,17 +2,17 @@
     {% for email in email_lst %}
         {% set spl = email|split('@') %}
         {% if name_lst[loop.index0] is defined %}
-            <a href="{{ path('app_search_filter', {email_from_names: name_lst[loop.index0]}) }}"><i
+            <a href="{{ path('app_search_filter', {'email_from_names': name_lst[loop.index0]}) }}"><i
                     class="fa-brands fa-searchengin"></i></a> {{ name_lst[loop.index0] }}
-            <a href="{{ path('app_email_showaddress', {emailAddress: email}) }}"><i
+            <a href="{{ path('app_email_showaddress', {'emailAddress': email}) }}"><i
                     class="fa-brands fa-searchengin"></i></a>&lt;<a
-            href="{{ path('app_username_username', {username: spl[0]}) }}"><i
+            href="{{ path('app_username_username', {'username': spl[0]}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[0] }}@<a
-            href="{{ path('app_hostname_hostname', {hostname: spl[1]}) }}"><i
+            href="{{ path('app_hostname_hostname', {'hostname': spl[1]}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[1] }}&gt;
         {% else %}
-        <a href="{{ path('app_username_username', {username: spl[0]}) }}"><i class="fa-brands fa-searchengin"></i>
-            </a>{{ spl[0] }}@<a href="{{ path('app_hostname_hostname', {hostname: spl[1]}) }}"><i
+        <a href="{{ path('app_username_username', {'username': spl[0]}) }}"><i class="fa-brands fa-searchengin"></i>
+            </a>{{ spl[0] }}@<a href="{{ path('app_hostname_hostname', {'hostname': spl[1]}) }}"><i
                 class="fa-brands fa-searchengin"></i></a>{{ spl[1] }}
         {% endif %}
         {% if not loop.last %},{% endif %}
