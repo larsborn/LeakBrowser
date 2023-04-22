@@ -4,25 +4,28 @@
 
 {% block body %}
     <h2>File Extensions</h2>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Extension</th>
-            <th>Count</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for extension in extensions %}
+    {% if extensions|length>0 %}
+        <table class="table table-striped table-bordered">
+            <thead>
             <tr>
-                <td>
-                    <a href="{{ path('app_search_filter', {'file_extension': extension.extension}) }}"><i
-                            class="fa-solid fa-search"></i></a>
-                    {{ extension.extension }}
-                </td>
-                <td>{{ extension.count }}</td>
+                <th>Extension</th>
+                <th>Count</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+            {% for extension in extensions %}
+                <tr>
+                    <td>
+                        <a href="{{ path('app_search_filter', {'file_extension': extension.extension}) }}"><i
+                                class="fa-solid fa-search"></i></a>
+                        {{ extension.extension }}
+                    </td>
+                    <td>{{ extension.count }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No file extensions found.</p>
+    {% endif %}
 {% endblock %}
