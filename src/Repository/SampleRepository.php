@@ -87,7 +87,7 @@ AQL,
         return $this->rawAql(
             <<<AQL
 FOR sample IN email_search
-    SEARCH ANALYZER(PHRASE(sample.email.subject, @query), "text_ru")
+    SEARCH ANALYZER(PHRASE(sample.email.subject, @query) OR PHRASE(sample.email.body, @query), "text_ru")
     COLLECT WITH COUNT INTO cnt
     RETURN cnt
 AQL,
@@ -103,7 +103,7 @@ AQL,
         return $this->aql(
             <<<AQL
 FOR sample IN email_search
-    SEARCH ANALYZER(PHRASE(sample.email.subject, @query), "text_ru")
+    SEARCH ANALYZER(PHRASE(sample.email.subject, @query) OR PHRASE(sample.email.body, @query), "text_ru")
     SORT sample.sha256
     LIMIT @offset, @limit
     RETURN sample
