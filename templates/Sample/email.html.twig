@@ -169,16 +169,38 @@
             {% endfor %}
         {% endif %}
     </dl>
-    {% if sample.email.body is defined %}
-        <div class="card">
-            <div class="card-header">
-                E-Mail Body
-                {% if sample.email.body_type is defined %}
-                    ({{ sample.email.body_type }})
-                {% endif %}
-            </div>
-            <div class="card-body">{{ sample.email.body|nl2br }}</div>
+    {% if sample.email.body is defined and sample.email.body_html is defined %}
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#plaintextEmailTab" type="button">
+                    Plaintext
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#htmlEmailTab" type="button">
+                    HTML
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active border-end border-bottom border-start p-3"
+                 id="plaintextEmailTab">{{ sample.email.body|nl2br }}</div>
+            <div class="tab-pane fade border-end border-bottom border-start p-3"
+                 id="htmlEmailTab">{{ sample.email.body_html }}</div>
         </div>
+    {% else %}
+        {% if sample.email.body is defined %}
+            <div class="card">
+                <div class="card-header">E-Mail Body</div>
+                <div class="card-body">{{ sample.email.body|nl2br }}</div>
+            </div>
+        {% endif %}
+        {% if sample.email.body_html is defined %}
+            <div class="card">
+                <div class="card-header">HTML E-Mail Body</div>
+                <div class="card-body">{{ sample.email.body_html }}</div>
+            </div>
+        {% endif %}
     {% endif %}
     {% if attachments|length > 0 %}
         <br/>
