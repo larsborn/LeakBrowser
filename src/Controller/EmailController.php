@@ -49,6 +49,14 @@ class EmailController extends AbstractController
         );
     }
 
+    #[Route('/by-month')]
+    public function byMonth(): Response
+    {
+        return $this->render('Email/by-month.html.twig', [
+            'emails_by_month' => $this->sampleRepository->groupEmailByMonth(),
+        ]);
+    }
+
     #[Route('/address/{emailAddress}')]
     public function showAddress(Request $request, string $emailAddress): Response
     {
