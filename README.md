@@ -1,13 +1,11 @@
 # Unnamed Leak Explorer
 
-## Error Messages
+Web frontend for a database containing leaked e-mail messages. Currently, those messages are mainly extracted from
+publicly available torrents. Design goal is easy data-discoverability and some data-analytics use cases.
 
-### Malformed Server Response
+## Tech Stack
 
-The error message
-```text
-Got a malformed result from the server
-```
-is indicative of, you guessed it, a malformed response from the server. So far this was always caused by binary data
-with invalid Unicode code points being stored in the ArangoDB document. This should not be possible when 
-`server.validate-utf8-strings` is set to `true` and is tracked at https://github.com/arangodb/arangodb/issues/18769.
+* 🥑 ArangoDB multi-model database: JSON document store, inverse index search, graph structure
+* 🐘 Symfony PHP-based web framework
+* 🐍 Python for generating the data set
+* 💽 Data Source email leaks from https://ddosecrets.com/
