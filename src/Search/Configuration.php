@@ -9,12 +9,15 @@ class Configuration
      */
     private array $fields;
 
+    private string $existenceGetParameterName;
+
     /**
      * @param Field[] $fields
      */
-    public function __construct(array $fields)
+    public function __construct(array $fields, string $existenceGetParameterName)
     {
         $this->fields = $fields;
+        $this->existenceGetParameterName = $existenceGetParameterName;
     }
 
     /**
@@ -23,5 +26,10 @@ class Configuration
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+    public function getExistenceGetParameterName(): string
+    {
+        return $this->existenceGetParameterName;
     }
 }

@@ -24,11 +24,27 @@ class SearchController extends AbstractController
 {
     private SearchHandler $searchHandler;
     private SampleRepository $sampleRepository;
+    private Configuration $configuration;
 
     public function __construct(SearchHandler $searchHandler, SampleRepository $sampleRepository)
     {
         $this->searchHandler = $searchHandler;
         $this->sampleRepository = $sampleRepository;
+        $this->configuration = new Configuration([
+            new Field('size', new IntegerType(), true, false),
+            new Field('mime_type', new StringType(), true, false),
+            new Field('file_extension', new StringType(), true, false),
+            new Field('crc32', new IntegerType(), true, false),
+            new Field('email.from_names', new StringArrayType(), true, false),
+            new Field('email.from', new StringArrayType(), true, false),
+            new Field('email.thread_index', new StringType(), true, false),
+            new Field('email.message_uuid', new StringType(), true, true),
+            new Field('email.list_uuid', new StringType(), true, false),
+            new Field('email.content_uuid', new StringType(), true, false),
+            new Field('file_names', new StringArrayType(), true, false),
+            new Field('email.references', new StringFieldInArrayType('uuid'), true, false),
+            new Field('email.date_month', new StringType(), true, false),
+        ], 'fieldsExist');
     }
 
     #[Route('/form')]
@@ -82,25 +98,7 @@ class SearchController extends AbstractController
     #[Route('/filter')]
     public function filter(Request $request): Response
     {
-        $configuration = new Configuration([
-            new Field('size', new IntegerType(), true, false),
-            new Field('mime_type', new StringType(), true, false),
-            new Field('file_extension', new StringType(), true, false),
-            new Field('crc32', new IntegerType(), true, false),
-            new Field('email.from_names', new StringArrayType(), true, false),
-            new Field('email.from', new StringArrayType(), true, false),
-            new Field('email.thread_index', new StringType(), true, false),
-            new Field('email.message_uuid', new StringType(), true, false),
-            new Field('email.list_uuid', new StringType(), true, false),
-            new Field('email.content_uuid', new StringType(), true, false),
-            new Field('file_names', new StringArrayType(), true, false),
-            new Field('email.references', new StringFieldInArrayType('uuid'), true, false),
-            new Field('email.date_month', new StringType(), true, false),
-        ]);
-        $searchResponse = $this->searchHandler->handle(
-            $configuration,
-            SearchRequest::fromRequest($configuration, $request),
-        );
+        $searchResponse = $this->searchHandler->handle(SearchRequest::fromRequest($this->configuration, $request));
 
         $samples = $searchResponse->getData();
 
@@ -112,5 +110,12 @@ class SearchController extends AbstractController
             'currentPage' => $searchResponse->getPage(),
             'pageCount' => $searchResponse->getPageCount(),
         ]);
+    }
+
+    #[Route('/header-exists')]
+    public function headerExists(Request $request): Response
+    {
+        $searchResponse = $this->searchHandler->handle(SearchRequest::fromRequest($this->configuration, $request));
+
     }
 }

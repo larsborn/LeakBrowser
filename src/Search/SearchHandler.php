@@ -24,9 +24,8 @@ class SearchHandler
         return preg_match("/^([a-f0-9]{64})$/", $s) === 1;
     }
 
-    private function handleFilterValue(SearchState $searchState, Field $field, SearchRequest $searchRequest): void
+    private function handleFilterValue(SearchState $searchState, Field $field, string $filterValue): void
     {
-        $filterValue = $searchRequest->filterValues[$field->getGetParameter()];
         $fieldType = $field->getType();
         if ($fieldType instanceof StringType) {
             $searchState->lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getGetParameter());
@@ -54,11 +53,17 @@ class SearchHandler
         }
     }
 
-    public function handle(Configuration $configuration, SearchRequest $searchRequest): SearchResponse
+    private function handleHeaderExistence(SearchState $searchState, Field $field): void
+    {
+        $searchState->lines[] = sprintf('FILTER doc.%s != null', $field->getFieldName());
+        $searchState->humanReadableQuery[] = sprintf('%s exists', $field->getFieldName());
+    }
+
+    public function handle(SearchRequest $searchRequest): SearchResponse
     {
         $limit = 10;
         $searchState = new SearchState([], [], []);
-        foreach ($configuration->getFields() as $field) {
+        foreach ($searchRequest->configuration->getFields() as $field) {
             if (in_array($field->getFieldName(), ['limit', 'offset'])) {
                 throw new RuntimeException(sprintf('Field with name "%s" not allowed', $field->getFieldName()));
             }
@@ -66,7 +71,10 @@ class SearchHandler
                 throw new RuntimeException(sprintf('Duplicate field: "%s"', $field->getFieldName()));
             }
             if (isset($searchRequest->filterValues[$field->getGetParameter()])) {
-                $this->handleFilterValue($searchState, $field, $searchRequest);
+                $this->handleFilterValue($searchState, $field, $searchRequest->filterValues[$field->getGetParameter()]);
+            }
+            if (in_array($field->getFieldName(), $searchRequest->fieldsExist)) {
+                $this->handleHeaderExistence($searchState, $field);
             }
         }
         $filter = implode("\n", $searchState->lines);
@@ -91,7 +99,7 @@ AQL,
             $searchRequest->page,
             $limit,
             $totalCount,
-            $configuration,
+            $searchRequest->configuration,
             $data,
             implode(' ', $searchState->humanReadableQuery)
         );
