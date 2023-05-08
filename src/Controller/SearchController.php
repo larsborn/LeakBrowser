@@ -83,19 +83,19 @@ class SearchController extends AbstractController
     public function filter(Request $request): Response
     {
         $configuration = new Configuration([
-            new Field('size', new IntegerType()),
-            new Field('mime_type', new StringType()),
-            new Field('file_extension', new StringType()),
-            new Field('crc32', new IntegerType()),
-            new Field('email.from_names', new StringArrayType()),
-            new Field('email.from', new StringArrayType()),
-            new Field('email.thread_index', new StringType()),
-            new Field('email.message_uuid', new StringType()),
-            new Field('email.list_uuid', new StringType()),
-            new Field('email.content_uuid', new StringType()),
-            new Field('file_names', new StringArrayType()),
-            new Field('email.references', new StringFieldInArrayType('uuid')),
-            new Field('email.date_month', new StringType()),
+            new Field('size', new IntegerType(), true, false),
+            new Field('mime_type', new StringType(), true, false),
+            new Field('file_extension', new StringType(), true, false),
+            new Field('crc32', new IntegerType(), true, false),
+            new Field('email.from_names', new StringArrayType(), true, false),
+            new Field('email.from', new StringArrayType(), true, false),
+            new Field('email.thread_index', new StringType(), true, false),
+            new Field('email.message_uuid', new StringType(), true, false),
+            new Field('email.list_uuid', new StringType(), true, false),
+            new Field('email.content_uuid', new StringType(), true, false),
+            new Field('file_names', new StringArrayType(), true, false),
+            new Field('email.references', new StringFieldInArrayType('uuid'), true, false),
+            new Field('email.date_month', new StringType(), true, false),
         ]);
         $searchResponse = $this->searchHandler->handle(
             $configuration,

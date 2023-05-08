@@ -10,6 +10,7 @@ class SearchRequest
     public function __construct(
         public readonly int $page,
         public readonly array $filterValues,
+        public readonly array $headersExist,
     ) {
     }
 
@@ -17,13 +18,15 @@ class SearchRequest
     {
         $filterValues = [];
         foreach ($configuration->getFields() as $field) {
-            $value = $request->query->get($field->getGetParameter());
-            if (!$value) {
-                continue;
+            if ($field->allowByValue()) {
+                $value = $request->query->get($field->getGetParameter());
+                if (! $value) {
+                    continue;
+                }
+                $filterValues[$field->getGetParameter()] = $value;
             }
-            $filterValues[$field->getGetParameter()] = $value;
         }
 
-        return new SearchRequest((int)$request->get('page', '0'), $filterValues);
+        return new SearchRequest((int)$request->get('page', '0'), $filterValues, []);
     }
 }
