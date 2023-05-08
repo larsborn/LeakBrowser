@@ -101,7 +101,11 @@
             </dd>
         {% endif %}
         {% if sample.email.message_uuid is defined or sample.email.message_host_id is defined %}
-            <dt class="col-sm-3">Message UUID@Host ID</dt>
+            <dt class="col-sm-3">
+                <a href="{{ path('app_search_fieldexists', {'fieldsExist': ['email.message_uuid']}) }}"><i
+                        class="fa-solid fa-file-powerpoint"></i></a>
+                Message UUID@Host ID
+            </dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="{{ path('app_search_filter', {'email_message_uuid': sample.email.message_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.message_uuid }}@<a

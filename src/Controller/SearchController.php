@@ -112,10 +112,18 @@ class SearchController extends AbstractController
         ]);
     }
 
-    #[Route('/header-exists')]
-    public function headerExists(Request $request): Response
+    #[Route('/field-exists')]
+    public function fieldExists(Request $request): Response
     {
-        $searchResponse = $this->searchHandler->handle(SearchRequest::fromRequest($this->configuration, $request));
-
+        $searchRequest = SearchRequest::fromRequest($this->configuration, $request);
+        $searchResponse = $this->searchHandler->handle($searchRequest);
+        return $this->render('Search/field-results.html.twig', [
+            'total' => $searchResponse->getTotal(),
+            'query' => $searchResponse->getHumanReadableQuery(),
+            'currentPage' => $searchResponse->getPage(),
+            'pageCount' => $searchResponse->getPageCount(),
+            'samples' => $searchResponse->getData(),
+            'fields' => $searchRequest->fieldsExist,
+        ]);
     }
 }
