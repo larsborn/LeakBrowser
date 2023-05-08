@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\GlobalSearch as GlobalSearchDTO;
+use App\DTO\SearchRequest;
 use App\Entity\Sample;
 use App\Form\GlobalSearchType;
 use App\Repository\SampleRepository;
@@ -96,7 +97,10 @@ class SearchController extends AbstractController
             new Field('email.references', new StringFieldInArrayType('uuid')),
             new Field('email.date_month', new StringType()),
         ]);
-        $searchResponse = $this->searchHandler->handle($configuration, $request);
+        $searchResponse = $this->searchHandler->handle(
+            $configuration,
+            SearchRequest::fromRequest($configuration, $request),
+        );
 
         $samples = $searchResponse->getData();
 

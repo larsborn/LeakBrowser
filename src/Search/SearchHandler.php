@@ -2,6 +2,7 @@
 
 namespace App\Search;
 
+use App\DTO\SearchRequest;
 use App\Repository\SampleRepository;
 use App\Search\FieldType\IntegerType;
 use App\Search\FieldType\StringArrayType;
@@ -24,10 +25,9 @@ class SearchHandler
         return preg_match("/^([a-f0-9]{64})$/", $s) === 1;
     }
 
-    public function handle(Configuration $configuration, Request $request): SearchResponse
+    public function handle(Configuration $configuration, SearchRequest $searchRequest): SearchResponse
     {
         $limit = 10;
-        $page = (int)$request->query->get('page', '0');
         $lines = [];
         $params = [];
         $humanReadableQuery = [];
@@ -38,10 +38,10 @@ class SearchHandler
             if (in_array($field->getFieldName(), $params)) {
                 throw new RuntimeException(sprintf('Duplicate field: "%s"', $field->getFieldName()));
             }
-            $filterValue = $request->query->get($field->getGetParameter());
-            if (! $filterValue) {
+            if (!isset($searchRequest->filterValues[$field->getGetParameter()])) {
                 continue;
             }
+            $filterValue = $searchRequest->filterValues[$field->getGetParameter()];
             $fieldType = $field->getType();
             if ($fieldType instanceof StringType) {
                 $lines[] = sprintf('FILTER doc.%s == @%s', $field->getFieldName(), $field->getGetParameter());
@@ -68,6 +68,7 @@ class SearchHandler
                 throw new RuntimeException(sprintf('Unhandled field type: "%s"', $fieldType::class));
             }
         }
+        dump($lines);
         $filter = implode("\n", $lines);
         if (count($lines) === 0) {
             $data = [];
@@ -81,13 +82,13 @@ FOR doc in samples
     LIMIT @offset, @limit
     RETURN doc
 AQL,
-                ['limit' => $limit, 'offset' => $page * $limit] + $params
+                ['limit' => $limit, 'offset' => $searchRequest->page * $limit] + $params
             );
             $totalCount = $this->sampleRepository->countBy($filter, $params);
         }
 
         return new SearchResponse(
-            $page,
+            $searchRequest->page,
             $limit,
             $totalCount,
             $configuration,
