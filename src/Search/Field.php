@@ -16,7 +16,7 @@ class Field
         $this->fieldName = $fieldName;
         $this->type = $type;
         $this->byValue = $byValue;
-        $this->$byExistence = $byExistence;
+        $this->byExistence = $byExistence;
     }
 
     public function getFieldName(): string
