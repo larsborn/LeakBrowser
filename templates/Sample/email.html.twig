@@ -94,7 +94,11 @@
             <dd class="col-sm-9 text-truncate">{{ sample.email.thread_topic }}</dd>
         {% endif %}
         {% if sample.email.thread_index is defined %}
-            <dt class="col-sm-3">Thread Index</dt>
+            <dt class="col-sm-3">
+                <a href="{{ path('app_search_fieldexists', {'fieldsExist': ['email.thread_index']}) }}"><i
+                        class="fa-solid fa-file-powerpoint"></i></a>
+                Thread Index
+            </dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="{{ path('app_search_filter', {'email_thread_index': sample.email.thread_index}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.thread_index }}
@@ -114,7 +118,11 @@
             </dd>
         {% endif %}
         {% if sample.email.list_uuid is defined and sample.email.list_host_id is defined %}
-            <dt class="col-sm-3">List UUID@Host ID</dt>
+            <dt class="col-sm-3">
+                <a href="{{ path('app_search_fieldexists', {'fieldsExist': ['email.list_uuid']}) }}"><i
+                        class="fa-solid fa-file-powerpoint"></i></a>
+                List UUID@Host ID
+            </dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="{{ path('app_search_filter', {'email_list_uuid': sample.email.list_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}@<a
@@ -122,7 +130,11 @@
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_host_id }}
             </dd>
         {% elseif sample.email.list_uuid is defined %}
-            <dt class="col-sm-3">List UUID</dt>
+            <dt class="col-sm-3">
+                <a href="{{ path('app_search_fieldexists', {'fieldsExist': ['email.list_uuid']}) }}"><i
+                        class="fa-solid fa-file-powerpoint"></i></a>
+                List UUID
+            </dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="{{ path('app_search_filter', {'email_list_uuid': sample.email.list_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.list_uuid }}
@@ -135,7 +147,11 @@
             </dd>
         {% endif %}
         {% if sample.email.content_uuid is defined or sample.email.content_host_id is defined %}
-            <dt class="col-sm-3">Content UUID@Host ID</dt>
+            <dt class="col-sm-3">
+                <a href="{{ path('app_search_fieldexists', {'fieldsExist': ['email.content_uuid']}) }}"><i
+                        class="fa-solid fa-file-powerpoint"></i></a>
+                Content UUID@Host ID
+            </dt>
             <dd class="col-sm-9 text-truncate">
                 <a href="{{ path('app_search_filter', {'email_content_uuid': sample.email.content_uuid}) }}"><i
                         class="fa-brands fa-searchengin"></i></a>{{ sample.email.content_uuid }}@<a
