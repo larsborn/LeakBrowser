@@ -34,6 +34,6 @@ class SearchRequest
             }
         }
 
-        return new SearchRequest($configuration, (int)$request->get('page', '0'), $filterValues, $fieldsExist);
+        return new SearchRequest($configuration, (int)$request->query->get('page', '0'), $filterValues, $fieldsExist);
     }
 }
