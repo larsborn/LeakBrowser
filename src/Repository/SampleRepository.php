@@ -283,11 +283,11 @@ AQL,
             $this->rawAql(
                 <<<AQL
 FOR sample IN samples
-    FILTER sample.file_extension == "eml"
     FILTER sample.email.date_month != null
-    COLLECT grp = sample.email.date_month WITH COUNT INTO cnt
+    SORT sample.email.date_month
+    COLLECT grp = sample.email.date_month WITH COUNT INTO cnt OPTIONS { method: "sorted" }
     SORT grp
-    RETURN {month: DATE_MONTH(grp), year: DATE_YEAR(grp), cnt: cnt }    
+    RETURN { month: DATE_MONTH(grp), year: DATE_YEAR(grp), cnt: cnt }
 AQL
             ));
     }

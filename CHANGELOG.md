@@ -1,5 +1,25 @@
 # Changelog
 
+## 2023-05-08
+
+* Allow filtering for existence of an email header. This is implemented by adding boolean configuration parameters to
+  the  `Field` class. Performance is still abysmal.
+* Various performance improvements on the database backend: counting emails for a given month for example was greatly
+  sped up by using a sparse index. This is faster because in order to count emails with a given value, the database
+  still needs to perform a full index scan. If the index is smaller, this scan is faster. In order to make use of this
+  performance improvement, we needed to remove `FILTER sample.file_extension == "eml"` from the query. In an even more
+  unexpected turn of events, it was possible to further speed up the query by adding `SORT sample.email.date_month`.
+  This is because the plan optimizer didn't realize that `sample.email.date_month` is already sorted. Tuning the 
+  `COLLECT` statement further allows to avoid the `hash` method of the `CollectNode` further shaving off a couple of ms:`
+```aql
+FOR sample IN samples
+    FILTER sample.email.date_month != null
+    SORT sample.email.date_month
+    COLLECT grp = sample.email.date_month WITH COUNT INTO cnt OPTIONS { method: "sorted" }
+    SORT grp
+    RETURN { month: DATE_MONTH(grp), year: DATE_YEAR(grp), cnt: cnt }
+```
+
 ## 2023-05-01
 
 * Add a table displaying email counts by month sent. The AQL query shown below was used to populate a new field called
