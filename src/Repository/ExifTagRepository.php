@@ -347,7 +347,10 @@ class ExifTagRepository
                 'This field specifies the maximum sample value.'
             ),
             new ExifTag(
-                342, ExifImage::TransferRange(), ExifType::Short(), 'Expands the range of the TransferFunction'
+                342,
+                ExifImage::TransferRange(),
+                ExifType::Short(),
+                'Expands the range of the TransferFunction'
             ),
             new ExifTag(
                 343,
@@ -605,7 +608,10 @@ class ExifTagRepository
             new ExifTag(37379, ExifImage::BrightnessValue(), ExifType::SRational(), 'The value of brightness.'),
             new ExifTag(37380, ExifImage::ExposureBiasValue(), ExifType::SRational(), 'The exposure bias.'),
             new ExifTag(
-                37381, ExifImage::MaxApertureValue(), ExifType::Rational(), 'The smallest F number of the lens.'
+                37381,
+                ExifImage::MaxApertureValue(),
+                ExifType::Rational(),
+                'The smallest F number of the lens.'
             ),
             new ExifTag(
                 37382,
@@ -687,7 +693,10 @@ class ExifTagRepository
             new ExifTag(37399, ExifImage::SensingMethod(), ExifType::Short(), 'Type of image sensor.'),
             new ExifTag(40091, ExifImage::XPTitle(), ExifType::Byte(), 'Title tag used by Windows, encoded in UCS2'),
             new ExifTag(
-                40092, ExifImage::XPComment(), ExifType::Byte(), 'Comment tag used by Windows, encoded in UCS2'
+                40092,
+                ExifImage::XPComment(),
+                ExifType::Byte(),
+                'Comment tag used by Windows, encoded in UCS2'
             ),
             new ExifTag(40093, ExifImage::XPAuthor(), ExifType::Byte(), 'Author tag used by Windows, encoded in UCS2'),
             new ExifTag(
@@ -697,7 +706,10 @@ class ExifTagRepository
                 'Keywords tag used by Windows, encoded in UCS2'
             ),
             new ExifTag(
-                40095, ExifImage::XPSubject(), ExifType::Byte(), 'Subject tag used by Windows, encoded in UCS2'
+                40095,
+                ExifImage::XPSubject(),
+                ExifType::Byte(),
+                'Subject tag used by Windows, encoded in UCS2'
             ),
             new ExifTag(
                 50341,
@@ -1385,7 +1397,10 @@ class ExifTagRepository
                 'This tag specifies color transforms that can be applied to masked image regions. Color transforms are specified using RGB-to-RGB color lookup tables. These tables are associated with Semantic Masks to limit the color transform to a sub-region of the image. The overall color transform is a linear combination of the color tables, weighted by their corresponding Semantic Masks.'
             ),
             new ExifTag(
-                33434, ExifPhoto::ExposureTime(), ExifType::Rational(), 'Exposure time, given in seconds (sec).'
+                33434,
+                ExifPhoto::ExposureTime(),
+                ExifType::Rational(),
+                'Exposure time, given in seconds (sec).'
             ),
             new ExifTag(33437, ExifPhoto::FNumber(), ExifType::Rational(), 'The F number.'),
             new ExifTag(

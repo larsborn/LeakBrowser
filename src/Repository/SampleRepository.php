@@ -275,7 +275,8 @@ AQL,
      */
     public function groupEmailByMonth(): array
     {
-        return array_map(fn (Document $document) => new EmailsInMonth(
+        return array_map(
+            fn (Document $document) => new EmailsInMonth(
             InputHelper::int($document->get('year')),
             InputHelper::int($document->get('month')),
             InputHelper::int($document->get('cnt')),
@@ -289,6 +290,7 @@ FOR sample IN samples
     SORT grp
     RETURN { month: DATE_MONTH(grp), year: DATE_YEAR(grp), cnt: cnt }
 AQL
-            ));
+            )
+        );
     }
 }
