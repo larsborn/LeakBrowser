@@ -224,7 +224,7 @@ AQL,
         foreach ($this->rawAql(
             <<<AQL
 FOR sample in samples
-    FILTER sample.file_extension != null
+    FILTER sample.file_extension > null
     COLLECT extension = sample.file_extension WITH COUNT INTO cnt
     SORT cnt DESC
     RETURN {"extension": extension, "count": cnt}
@@ -284,7 +284,7 @@ AQL,
             $this->rawAql(
                 <<<AQL
 FOR sample IN samples
-    FILTER sample.email.date_month != null
+    FILTER sample.email.date_month > null
     SORT sample.email.date_month
     COLLECT grp = sample.email.date_month WITH COUNT INTO cnt OPTIONS { method: "sorted" }
     SORT grp

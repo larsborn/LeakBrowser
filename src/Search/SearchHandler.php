@@ -55,7 +55,7 @@ class SearchHandler
 
     private function handleHeaderExistence(SearchState $searchState, Field $field): void
     {
-        $searchState->lines[] = sprintf('FILTER doc.%s != null', $field->getFieldName());
+        $searchState->lines[] = sprintf('FILTER doc.%s > null', $field->getFieldName());
         $searchState->humanReadableQuery[] = sprintf('%s exists', $field->getFieldName());
     }
 
@@ -77,7 +77,7 @@ class SearchHandler
                 $this->handleHeaderExistence($searchState, $field);
             }
         }
-        $filter = implode("\n", $searchState->lines);
+        $filter = implode("\n    ", $searchState->lines);
         if (count($searchState->lines) === 0) {
             $data = [];
             $totalCount = 0;
@@ -86,7 +86,7 @@ class SearchHandler
                 <<<AQL
 FOR doc in samples
     $filter
-    SORT doc.sha256
+    //SORT doc.sha256 // commenting this in makes queries very slow
     LIMIT @offset, @limit
     RETURN doc
 AQL,

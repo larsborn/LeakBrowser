@@ -99,7 +99,6 @@ class SearchController extends AbstractController
     public function filter(Request $request): Response
     {
         $searchResponse = $this->searchHandler->handle(SearchRequest::fromRequest($this->configuration, $request));
-
         $samples = $searchResponse->getData();
 
         return $this->render('Search/results.html.twig', [
